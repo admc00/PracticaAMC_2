@@ -5,15 +5,18 @@ public class Arista {
     private final Punto x2;
     private double peso;
 
+
     public Arista(Punto x1, Punto x2) {
         this.x1 = x1;
         this.x2 = x2;
         this.peso();
+
     }
 
     public Arista() {
         this.x1 = new Punto();
         this.x2 = new Punto();
+
     }
 
     public double getPeso() {
