@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class Grafo {
 
-    // Mapa para almacenar las relaciones entre puntos y sus aristas
-    private final Map<Punto, Set<Arista>> relaciones;
+    /// Mapa para almacenar las relaciones entre puntos y sus aristas
+    private Map<Punto, Set<Arista>> relaciones; //Hay que usar LinkedHashMap en el constructor
 
     // Constructor
     public Grafo() {
