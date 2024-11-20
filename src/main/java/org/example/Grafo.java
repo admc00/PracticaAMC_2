@@ -5,7 +5,7 @@ import java.util.*;
 public class Grafo {
 
     /// Mapa para almacenar las relaciones entre puntos y sus aristas
-    private Map<Punto, Set<Arista>> relaciones;
+    public Map<Punto, Set<Arista>> relaciones;
 
     // Constructor
     public Grafo() {

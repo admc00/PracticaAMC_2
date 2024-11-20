@@ -4,16 +4,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Ficheros {
 
-   /* public static  leerFichero(String texto) {
+   public static Grafo  leerFichero(String texto) {
         FileReader fr = null;
         BufferedReader br;
 
-        var p = new ArrayList<Punto>();
+        Grafo grafo = new Grafo();
 
         try {
             String localDir = System.getProperty("user.dir");
@@ -38,7 +41,16 @@ public class Ficheros {
                 }
                 String[] parte = linea.split(" ");
                 if (parte.length == 3) {
-                    p.add(new Punto(Double.parseDouble(parte[1]), Double.parseDouble(parte[2]), Integer.parseInt(parte[0])));
+                    grafo.agregarPunto(new Punto(Double.parseDouble(parte[1]), Double.parseDouble(parte[2]), Integer.parseInt(parte[0])));
+                }
+            }
+            var puntos = grafo.obtenerPuntos();
+            for (var punto1 :puntos) {
+                for (var punto2 : puntos) {
+                    if (punto1.getID() != punto2.getID()) {
+                        Arista arista = new Arista(punto1, punto2);
+                        grafo.agregarArista(punto1, punto2, arista);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -52,8 +64,8 @@ public class Ficheros {
                 Logger.getLogger(Ficheros.class.getName()).log(Level.SEVERE, "ERROR LEYENDO FICHEROS", e2);
             }
         }
-        return p;
-    }*/
+        return grafo;
+    }
 
 
 }
