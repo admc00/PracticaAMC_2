@@ -1,14 +1,11 @@
 package org.example;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Grafo {
 
     /// Mapa para almacenar las relaciones entre puntos y sus aristas
-    private Map<Punto, Set<Arista>> relaciones; //Hay que usar LinkedHashMap en el constructor
+    private Map<Punto, Set<Arista>> relaciones;
 
     // Constructor
     public Grafo() {
