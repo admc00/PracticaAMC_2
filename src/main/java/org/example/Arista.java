@@ -36,5 +36,13 @@ public class Arista {
     public Punto getX2() {
         return x2;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Arista{" +
+                "x1=" + x1 +
+                ", x2=" + x2 +
+                ", peso=" + peso +
+                '}';
+    }
 }

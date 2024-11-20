@@ -9,7 +9,7 @@ public class Grafo {
 
     // Constructor
     public Grafo() {
-        this.relaciones = new HashMap<>();
+        this.relaciones = new LinkedHashMap<>();
     }
 
     /**
@@ -78,6 +78,21 @@ public class Grafo {
      */
     public Set<Punto> obtenerPuntos() {
         return relaciones.keySet();
+    }
+
+    @Override
+    public String toString() {
+        String grafo_string = "Grafo: {\n\n";
+
+        for (Punto punto : obtenerPuntos()) {
+            grafo_string = grafo_string.concat("Punto: " + punto.toString() + " {");
+            for (Arista arista : obtenerAristas(punto)) {
+                grafo_string = grafo_string.concat(arista.toString());
+            }
+            grafo_string.concat("}\n\n");
+        }
+
+        return grafo_string;
     }
 }
 

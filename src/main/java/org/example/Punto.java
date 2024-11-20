@@ -38,4 +38,8 @@ public class Punto {
         this.visitado = visitado;
     }
 
+    @Override
+    public String toString() {
+        return "id: " + this.id + ", x: " + this.x + ", y: " + this.y;
+    }
 }

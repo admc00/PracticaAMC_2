@@ -7,6 +7,6 @@ public class Main {
         Ficheros fichero = new Ficheros();
         Grafo grafo = new Grafo();
         grafo = fichero.leerFichero("berlin52.tsp");
-        System.out.println(grafo.relaciones.toString());
+        System.out.println(grafo.toString());
     }
 }
