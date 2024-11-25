@@ -1,19 +1,18 @@
 package org.example;
 
-public class Punto {
+public class Ciudad {
 
-    private final double x;
-    private final double y;
+    private final double x, y;
     private final int id;
-    private Boolean visitado = false;
+    private Boolean visitada = false;
 
-    public Punto(double x, double y, int id) {
+    public Ciudad(double x, double y, int id) {
         this.x = x;
         this.y = y;
         this.id = id;
     }
 
-    public Punto() {
+    public Ciudad() {
         this.x = 0.0;
         this.y = 0.0;
         this.id = 0;
@@ -27,15 +26,16 @@ public class Punto {
         return this.y;
     }
 
-    public float getID() {
-        return (float) this.id;
+    public int getID() {
+        return this.id;
     }
 
-    public Boolean getVisitado() {
-        return this.visitado;
+    public Boolean esVisitada() {
+        return this.visitada;
     }
-    public void setVisitado(Boolean visitado) {
-        this.visitado = visitado;
+
+    public void setVisitada(Boolean visitada) {
+        this.visitada = visitada;
     }
 
     @Override

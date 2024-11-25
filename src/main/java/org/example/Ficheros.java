@@ -3,16 +3,12 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Ficheros {
 
-   public static Grafo  leerFichero(String texto) {
+    public static Grafo leerFichero(String texto) {
         FileReader fr = null;
         BufferedReader br;
 
@@ -31,8 +27,6 @@ public class Ficheros {
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
-            //String linea;
-
             var lineas = br.lines().skip(6).toList();
 
             for (var linea : lineas) {
@@ -41,15 +35,17 @@ public class Ficheros {
                 }
                 String[] parte = linea.split(" ");
                 if (parte.length == 3) {
-                    grafo.agregarPunto(new Punto(Double.parseDouble(parte[1]), Double.parseDouble(parte[2]), Integer.parseInt(parte[0])));
+                    grafo.agregarCiudad(new Ciudad(Double.parseDouble(parte[1]), Double.parseDouble(parte[2]), Integer.parseInt(parte[0])));
                 }
             }
-            var puntos = grafo.obtenerPuntos();
-            for (var punto1 :puntos) {
-                for (var punto2 : puntos) {
-                    if (punto1.getID() != punto2.getID()) {
-                        Arista arista = new Arista(punto1, punto2);
-                        grafo.agregarArista(punto1, punto2, arista);
+
+            var ciudades = grafo.obtenerCiudades();
+
+            for (var ciudad1 : ciudades) {
+                for (var ciudad2 : ciudades) {
+                    if (ciudad1.getID() != ciudad2.getID()) {
+                        Camino camino = new Camino(ciudad1, ciudad2);
+                        grafo.agregarCamino(ciudad1, ciudad2, camino);
                     }
                 }
             }
@@ -68,4 +64,5 @@ public class Ficheros {
     }
 
 
+    //@TODO: Importar el resto de clases de Fichero de la prac 1
 }

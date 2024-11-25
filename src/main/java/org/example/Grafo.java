@@ -1,11 +1,14 @@
 package org.example;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Grafo {
 
-    /// Mapa para almacenar las relaciones entre puntos y sus aristas
-    public Map<Punto, Set<Arista>> relaciones;
+    /// Mapa para almacenar las relaciones entre ciudades y sus caminos
+    private Map<Ciudad, Set<Camino>> relaciones;
 
     // Constructor
     public Grafo() {
@@ -13,70 +16,70 @@ public class Grafo {
     }
 
     /**
-     * Agregar un punto al grafo.
-     * Si el punto ya existe, no se realiza ninguna acción.
+     * Agregar un ciudad al grafo.
+     * Si la ciudad ya existe, no se realiza ninguna acción.
      *
-     * @param punto El punto a agregar.
+     * @param ciudad El ciudad a agregar.
      */
-    public void agregarPunto(Punto punto) {
-        relaciones.putIfAbsent(punto, new HashSet<>());
+    public void agregarCiudad(Ciudad ciudad) {
+        relaciones.putIfAbsent(ciudad, new HashSet<>());
     }
 
     /**
-     * Agregar una arista al grafo. Si alguno de los puntos de la arista no existe,
+     * Agregar una camino al grafo. Si alguno de las ciudades del camino no existe,
      * se agrega automáticamente.
      *
-     * @param punto1 Punto de inicio de la arista.
-     * @param punto2 Punto final de la arista.
-     * @param arista La arista a agregar.
+     * @param ciudad1 Ciudad de inicio del camino.
+     * @param ciudad2 Ciudad final del camino.
+     * @param camino El camino a agregar.
      */
-    public void agregarArista(Punto punto1, Punto punto2, Arista arista) {
-        // Agregar los puntos si no existen
-        agregarPunto(punto1);
-        agregarPunto(punto2);
+    public void agregarCamino(Ciudad ciudad1, Ciudad ciudad2, Camino camino) {
+        // Agregar las ciudades si no existen
+        agregarCiudad(ciudad1);
+        agregarCiudad(ciudad2);
 
-        // Asociar la arista con ambos puntos
-        relaciones.get(punto1).add(arista);
-        relaciones.get(punto2).add(arista);
+        // Asociar el camino con ambas ciudades
+        relaciones.get(ciudad1).add(camino);
+        relaciones.get(ciudad2).add(camino);
     }
 
     /**
-     * Obtener las aristas asociadas a un punto.
+     * Obtener los caminos asociadas a una ciudad.
      *
-     * @param punto El punto del que se quieren obtener las aristas.
-     * @return Un conjunto de aristas asociadas al punto, o null si el punto no existe.
+     * @param ciudad La ciudad del que se quieren obtener los caminos.
+     * @return Un conjunto de caminos asociados a la ciudad, o null si la ciudad no existe.
      */
-    public Set<Arista> obtenerAristas(Punto punto) {
-        return relaciones.getOrDefault(punto, null);
+    public Set<Camino> obtenerCaminos(Ciudad ciudad) {
+        return relaciones.getOrDefault(ciudad, null);
     }
 
     /**
-     * Verificar si el grafo contiene un punto.
+     * Verificar si el grafo contiene una ciudad.
      *
-     * @param punto El punto a verificar.
-     * @return true si el punto está en el grafo, false en caso contrario.
+     * @param ciudad La ciudad a verificar.
+     * @return true si la ciudad está en el grafo, false en caso contrario.
      */
-    public boolean contienePunto(Punto punto) {
-        return relaciones.containsKey(punto);
+    public boolean contieneCiudad(Ciudad ciudad) {
+        return relaciones.containsKey(ciudad);
     }
 
     /**
-     * Verificar si el grafo contiene una arista.
+     * Verificar si el grafo contiene un camino.
      *
-     * @param arista La arista a verificar.
-     * @return true si la arista está en el grafo, false en caso contrario.
+     * @param camino El camino a verificar.
+     * @return true si el camino está en el grafo, false en caso contrario.
      */
-    public boolean contieneArista(Arista arista) {
+    public boolean contieneCamino(Camino camino) {
         return relaciones.values().stream()
-                .anyMatch(aristas -> aristas.contains(arista));
+                .anyMatch(caminos -> caminos.contains(camino));
     }
 
     /**
-     * Obtener todos los puntos del grafo.
+     * Obtener todas las ciudades del grafo.
      *
-     * @return Un conjunto con todos los puntos del grafo.
+     * @return Un conjunto con todas las ciudades del grafo.
      */
-    public Set<Punto> obtenerPuntos() {
+    public Set<Ciudad> obtenerCiudades() {
         return relaciones.keySet();
     }
 
@@ -84,10 +87,10 @@ public class Grafo {
     public String toString() {
         String grafo_string = "Grafo: {\n\n";
 
-        for (Punto punto : obtenerPuntos()) {
-            grafo_string = grafo_string.concat("Punto: " + punto.toString() + " {");
-            for (Arista arista : obtenerAristas(punto)) {
-                grafo_string = grafo_string.concat(arista.toString());
+        for (Ciudad ciudad : obtenerCiudades()) {
+            grafo_string = grafo_string.concat("Ciudad: " + ciudad.toString() + " {");
+            for (Camino camino : obtenerCaminos(ciudad)) {
+                grafo_string = grafo_string.concat(camino.toString());
             }
             grafo_string.concat("}\n\n");
         }
