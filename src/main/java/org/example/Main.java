@@ -4,9 +4,9 @@ package org.example;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        Ficheros fichero = new Ficheros();
         Grafo grafo = new Grafo();
-        grafo = fichero.leerFichero("berlin52.tsp");
-        System.out.println(grafo.toString());
+        grafo = Ficheros.leerFichero("almonte5.tsp");
+        BusquedaVorazExhausitvaUni.costeMinimo(grafo);
+
     }
 }
