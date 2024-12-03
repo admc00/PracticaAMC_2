@@ -40,7 +40,7 @@ public class Grafo {
 
         // Asociar el camino con ambas ciudades
         relaciones.get(ciudad1).add(camino);
-        relaciones.get(ciudad2).add(camino);
+        //relaciones.get(ciudad2).add(camino);
     }
 
     /**

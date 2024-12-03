@@ -5,8 +5,8 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
         Ficheros fichero = new Ficheros();
-        Grafo grafo = new Grafo();
-        grafo = fichero.leerFichero("berlin52.tsp");
-        System.out.println(grafo.toString());
+        Grafo grafo = fichero.leerFichero("almonte5.tsp");
+        //System.out.println(grafo.toString());
+        System.out.println(BusquedaVorazExhaustivaBi.costeMinimo(grafo));
     }
 }
