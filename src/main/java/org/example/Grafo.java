@@ -36,7 +36,7 @@ public class Grafo {
     public void agregarCamino(Ciudad ciudad1, Ciudad ciudad2, Camino camino) {
         // Agregar las ciudades si no existen
         agregarCiudad(ciudad1);
-        //agregarCiudad(ciudad2);
+        agregarCiudad(ciudad2);
 
         // Asociar el camino con ambas ciudades
         relaciones.get(ciudad1).add(camino);

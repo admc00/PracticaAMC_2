@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Grafo grafo = new Grafo();
         grafo = Ficheros.leerFichero("almonte5.tsp");
-        BusquedaVorazExhausitvaUni.costeMinimo(grafo);
+        System.out.println(BusquedaVorazExhausitvaUni.costeMinimo(grafo));
 
     }
 }

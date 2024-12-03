@@ -15,7 +15,9 @@ public class BusquedaVorazExhausitvaUni {
 
         // Elegir una ciudad aleatoria para comenzar
         Ciudad ciudadActual = ciudades.get(new Random().nextInt(ciudades.size()));
+        ciudadActual.setVisitada(true);
         ruta.add(ciudadActual);
+
 
         while (ruta.size() < grafo.obtenerCiudades().size()) {
             Ciudad ciudadMasCercana = encontrarCiudadMasCercana(grafo, ciudadActual);
