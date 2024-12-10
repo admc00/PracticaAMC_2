@@ -18,7 +18,6 @@ public class BusquedaVorazExhausitvaUni {
         ciudadActual.setVisitada(true);
         ruta.add(ciudadActual);
 
-
         while (ruta.size() < grafo.obtenerCiudades().size()) {
             Ciudad ciudadMasCercana = encontrarCiudadMasCercana(grafo, ciudadActual);
             if (ciudadMasCercana != null) {
