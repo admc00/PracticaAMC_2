@@ -30,7 +30,6 @@ public class BusquedaVorazExhausitvaUni {
                 break;
             }
 
-
         }
 
         // Imprimir la ruta
