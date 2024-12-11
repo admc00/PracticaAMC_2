@@ -1,8 +1,7 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,6 +60,57 @@ public class Ficheros {
             }
         }
         return grafo;
+    }
+
+    public static void crearArchivoTSP(Integer size) {
+        File dir, file;
+
+        if (estrategia == null) {
+            dir = new File(System.getProperty("user.dir") + File.separator + "dataset" + File.separator + "dataset" + size + ".tsp");
+            dir.mkdirs();
+
+            file = new File(dir.getPath() + File.separator + "dataset" + size + ".tsp");
+
+            puntos = rellenarPuntos(size, peorCaso);
+        } else {
+            dir = new File(System.getProperty("user.dir") + File.separator + "dataset" + File.separator + estrategia + ".tsp");
+            dir.mkdirs();
+
+            file = new File(dir.getPath() + File.separator + estrategia + ".tsp");
+
+            puntos = dataSet;
+            size = puntos.size();
+        }
+
+        String filePath = file.toString();
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            writer.write("NAME: " + (estrategia != null ? estrategia : ("dataset" + size)) + ".tsp");
+            writer.newLine();
+            writer.write("TYPE: TSP");
+            writer.newLine();
+            writer.write("COMMENT: " + size + " locations");
+            writer.newLine();
+            writer.write("DIMENSION: " + size);
+            writer.newLine();
+            writer.write("EDGE_WEIGHT_TYPE: EUC_2D");
+            writer.newLine();
+            writer.write("NODE_COORD_SECTION");
+            writer.newLine();
+            for (int i = 0; i < size; i++) {
+                writer.write(i + 1 + " " + puntos.get(i).getX() + " " + puntos.get(i).getY());
+                writer.newLine();
+            }
+            writer.write("EOF");
+            writer.newLine();
+
+            //Forzar escritura en el archivo
+            writer.flush();
+        } catch (IOException e) {
+            Logger.getLogger(Ficheros.class.getName()).log(Level.SEVERE, "ERROR ARCHIVOS TSP", e);
+        }
+
     }
 
 

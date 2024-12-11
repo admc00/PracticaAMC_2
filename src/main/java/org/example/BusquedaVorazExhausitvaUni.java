@@ -36,6 +36,7 @@ public class BusquedaVorazExhausitvaUni {
         System.out.println("Ruta: " + ruta);
         System.out.println("\n");
         System.out.println("Número de ciudades visitadas: " + ruta.size());
+        System.out.println("Coste: " + coste);
 
         return coste;
     }

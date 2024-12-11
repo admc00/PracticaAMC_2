@@ -69,19 +69,19 @@ public class BusquedaVorazPodaBi {
         return coste;
     }
 
-    // Método para buscar la ciudad más cercana a un extremo
+    // Metodo para buscar la ciudad más cercana a un extremo
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
 
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
+
+            if (Math.abs(ciudadActual.getX() - ciudadDestino.getX()) >= (caminoMasCorto != null ? caminoMasCorto.getPeso() : 0)) {
+                break;
+            }
             if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                 caminoMasCorto = camino;
-            }
-
-            if (Math.abs(ciudadActual.getX() - ciudadDestino.getX()) >= caminoMasCorto.getPeso()) {
-                break;
             }
         }
 
