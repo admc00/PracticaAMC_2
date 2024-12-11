@@ -1,25 +1,21 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BusquedaVorazPodaBi {
     private static List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo) {
-        Set<Ciudad> ciudades = grafo.obtenerCiudades();
-        //if (ciudades.isEmpty()) return Collections.emptyList();
+        List<Ciudad> ciudades = new ArrayList<>(grafo.obtenerCiudades());
+        if (ciudades.isEmpty()) return 0;
 
         // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
+        Ciudad ciudadInicial = ciudades.get(new Random().nextInt(ciudades.size()));/*ciudades
                 .stream()
                 .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
                 .findFirst().orElse(null);*/
 
-        //int indiceCiudadInicial = ruta.indexOf(ciudadInicial);
         int idCiudadInicial = ciudadInicial.getID();
 
         // Inicializar variables
@@ -62,7 +58,7 @@ public class BusquedaVorazPodaBi {
             if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
-        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get());
+        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
         System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
@@ -77,12 +73,11 @@ public class BusquedaVorazPodaBi {
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
 
-            if (Math.abs(ciudadActual.getX() - ciudadDestino.getX()) >= (caminoMasCorto != null ? caminoMasCorto.getPeso() : 0)) {
-                break;
-            }
             if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                 caminoMasCorto = camino;
             }
+
+            if(caminoMasCorto != null && Math.abs(ciudadActual.getX() - ciudadDestino.getX()) > caminoMasCorto.getPeso()) {break;}
         }
 
         return caminoMasCorto;

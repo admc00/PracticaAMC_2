@@ -8,16 +8,15 @@ public class BusquedaVorazExhaustivaBi {
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo) {
-        Set<Ciudad> ciudades = grafo.obtenerCiudades();
-        //if (ciudades.isEmpty()) return Collections.emptyList();
+        List<Ciudad> ciudades = new ArrayList<>(grafo.obtenerCiudades());
+        if (ciudades.isEmpty()) return 0;
 
         // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
+        Ciudad ciudadInicial = ciudades.get(new Random().nextInt(ciudades.size()));/*ciudades
                 .stream()
                 .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
                 .findFirst().orElse(null);*/
 
-        //int indiceCiudadInicial = ruta.indexOf(ciudadInicial);
         int idCiudadInicial = ciudadInicial.getID();
 
         // Inicializar variables
@@ -60,7 +59,7 @@ public class BusquedaVorazExhaustivaBi {
             if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
-        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get());
+        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
         System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);

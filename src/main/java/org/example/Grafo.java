@@ -15,6 +15,10 @@ public class Grafo {
         this.relaciones = new LinkedHashMap<>();
     }
 
+    public Grafo(Grafo g) {
+        this.relaciones = new LinkedHashMap<>(g.relaciones);
+    }
+
     /**
      * Agregar un ciudad al grafo.
      * Si la ciudad ya existe, no se realiza ninguna acción.

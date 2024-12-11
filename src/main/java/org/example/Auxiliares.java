@@ -119,6 +119,14 @@ public class Auxiliares {
             nuevaVentana.setVisible(false);
             Menu();
         });
+        JButton almonte5 = new JButton("almonte5");
+        almonte5.addActionListener(e -> {
+            // Código a ejecutar cuando se haga clic en el botón
+            Ficheros.leerFichero("almonte5.tsp");
+            g = Ficheros.leerFichero("almonte5.tsp");
+            nuevaVentana.setVisible(false);
+            Menu();
+        });
         JButton salir = new JButton("Salir");
         salir.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
@@ -132,13 +140,15 @@ public class Auxiliares {
         ch150.setBounds(50, 90, 200, 30);
         d493.setBounds(50, 130, 200, 30);
         d657.setBounds(50, 170, 200, 30);
-        salir.setBounds(50, 210, 200, 30);
+        almonte5.setBounds(50, 210, 200, 30);
+        salir.setBounds(50, 250, 200, 30);
 
         nuevaVentana.add(berlin52);
         nuevaVentana.add(ch130);
         nuevaVentana.add(ch150);
         nuevaVentana.add(d493);
         nuevaVentana.add(d657);
+        nuevaVentana.add(almonte5);
         nuevaVentana.add(salir);
 
 
@@ -153,15 +163,27 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
-        //double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
+        var g1 = new Grafo(g);
+        var g2 = new Grafo(g);
+        var g3 = new Grafo(g);
+        var g4 = new Grafo(g);
+
+
+
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g1);
+
+        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g2);
+
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
-        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
+
+        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
+
+
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
-                    {"Bidireccional exhaustivo",0, 12249, 0.2317},
+                    {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
                     {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
                     {"Bidireccional con poda",0, 2947, 0.1571}
         };

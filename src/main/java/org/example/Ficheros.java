@@ -1,7 +1,8 @@
 package org.example;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,7 +63,7 @@ public class Ficheros {
         return grafo;
     }
 
-    public static void crearArchivoTSP(Integer size) {
+    /*public static void crearArchivoTSP(Integer size) {
         File dir, file;
 
         if (estrategia == null) {
@@ -111,7 +112,7 @@ public class Ficheros {
             Logger.getLogger(Ficheros.class.getName()).log(Level.SEVERE, "ERROR ARCHIVOS TSP", e);
         }
 
-    }
+    }*/
 
 
     //@TODO: Importar el resto de clases de Fichero de la prac 1
