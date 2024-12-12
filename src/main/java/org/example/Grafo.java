@@ -47,6 +47,10 @@ public class Grafo {
         //relaciones.get(ciudad2).add(camino);
     }
 
+    public void agregarTupla(Ciudad ciudad1, Set<Camino> caminos) {
+        relaciones.putIfAbsent(ciudad1, caminos);
+    }
+
     /**
      * Obtener los caminos asociadas a una ciudad.
      *
@@ -87,6 +91,9 @@ public class Grafo {
         return relaciones.keySet();
     }
 
+    /**
+    * Reestablece las ciudades a no visitadas.
+    */
     public void resetearGrafo() {
         for (Ciudad ciudad : obtenerCiudades()) {
             ciudad.setVisitada(false);

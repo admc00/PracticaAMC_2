@@ -2,12 +2,13 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Auxiliares {
 
-    private static Grafo g;
+    private static Grafo grafo, grafoOrd;
 
-    public static void Menu(){
+    public static void Menu() {
         JFrame menu = new JFrame("Menú");
         menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menu.setSize(400, 300);
@@ -84,7 +85,7 @@ public class Auxiliares {
         JButton berlin52 = new JButton("Berlin52");
         berlin52.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            g = Ficheros.leerFichero("berlin52.tsp");
+            grafo = Ficheros.leerFichero("berlin52.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -92,7 +93,7 @@ public class Auxiliares {
         ch130.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             Ficheros.leerFichero("ch130.tsp");
-            g = Ficheros.leerFichero("ch130.tsp");
+            grafo = Ficheros.leerFichero("ch130.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -100,7 +101,7 @@ public class Auxiliares {
         ch150.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             Ficheros.leerFichero("ch150.tsp");
-            g = Ficheros.leerFichero("ch150.tsp");
+            grafo = Ficheros.leerFichero("ch150.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -108,7 +109,7 @@ public class Auxiliares {
         d493.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             Ficheros.leerFichero("d493.tsp");
-            g = Ficheros.leerFichero("d493.tsp");
+            grafo = Ficheros.leerFichero("d493.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -116,7 +117,7 @@ public class Auxiliares {
         d657.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             Ficheros.leerFichero("d657.tsp");
-            g = Ficheros.leerFichero("d657.tsp");
+            grafo = Ficheros.leerFichero("d657.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -154,17 +155,16 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
-        g.resetearGrafo();
-        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
-        g.resetearGrafo();
-        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
-        g.resetearGrafo();
-        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
-        g.resetearGrafo();
+        grafoOrd = ordenarGrafo(grafo);
 
-
-
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo);
+        grafo.resetearGrafo();
+        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo);
+        grafo.resetearGrafo();
+        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd);
+        grafoOrd.resetearGrafo();
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd);
+        grafoOrd.resetearGrafo();
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
@@ -187,7 +187,7 @@ public class Auxiliares {
 
         ComprobarEstrategias.add(salir, BorderLayout.SOUTH);
 
-            // Agregar la tabla al frame
+        // Agregar la tabla al frame
         ComprobarEstrategias.add(scrollPane, BorderLayout.CENTER);
 
         ComprobarEstrategias.setVisible(true);
@@ -208,7 +208,7 @@ public class Auxiliares {
                 // Llamar al método que crea el archivo con el tamaño especificado
                 Ficheros.crearArchivoTSP(size);
                 JOptionPane.showMessageDialog(CrearArchivo, "Archivo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                g = Ficheros.leerFichero("dataset" + size + ".tsp");
+                grafo = Ficheros.leerFichero("dataset" + size + ".tsp");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(CrearArchivo, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -217,4 +217,67 @@ public class Auxiliares {
         }
 
     }
+
+    /**
+     * @param g Grafo a ordenar.
+     * @return un grafo ordenado.
+     */
+    private static Grafo ordenarGrafo(Grafo g) {
+        Grafo gOrdenado = new Grafo();
+        var ciudades = g.obtenerCiudades();
+        ArrayList<Ciudad> ciudadesOrdenadas = Ordenar.quickSort(new ArrayList<>(ciudades),0,ciudades.size()-1);
+
+        for (Ciudad ciudad : ciudadesOrdenadas) {
+            gOrdenado.agregarTupla(ciudad, g.obtenerCaminos(ciudad));
+        }
+        return gOrdenado;
+    }
+
+    private static class Ordenar {
+
+        private Ordenar() {}
+
+        public static ArrayList<Ciudad> quickSort(ArrayList<Ciudad> ciudades, int low, int high) {
+
+            if (low < high) {
+                int pi = partition(ciudades, low, high);
+
+                quickSort(ciudades, low, pi - 1);
+                quickSort(ciudades, pi + 1, high);
+            }
+            return ciudades;
+        }
+
+        private static int partition(ArrayList<Ciudad> ciudades, int low, int high) {
+            Ciudad pivot = ciudades.get(high);
+            int i = low - 1;
+
+            for (int j = low; j < high; j++) {
+                if (compare(ciudades.get(j), pivot) <= 0) {
+                    i++;
+                    swap(ciudades, i, j);
+                }
+            }
+
+            swap(ciudades, i + 1, high);
+            return i + 1;
+        }
+
+        private static double compare(Ciudad c1, Ciudad c2) {
+            // Comparar los puntos según algún criterio, por ejemplo, comparar las coordenadas x o y.
+            // Devolver un número negativo si c1 es menor que c2,
+            // devolver 0 si c1 es igual a c2,
+            // devolver un número positivo si c1 es mayor que c2.
+
+            // Ejemplo de comparación por coordenada x:
+            return Double.compare(c1.getX(), c2.getX());
+        }
+
+        private static void swap(ArrayList<Ciudad> ciudades, int i, int j) {
+            Ciudad temp = ciudades.get(i);
+            ciudades.set(i, ciudades.get(j));
+            ciudades.set(j, temp);
+        }
+    }
+
 }

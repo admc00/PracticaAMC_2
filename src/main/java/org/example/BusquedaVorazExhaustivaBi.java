@@ -12,10 +12,7 @@ public class BusquedaVorazExhaustivaBi {
         if (ciudades.isEmpty()) return 0;
 
         // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.get(new Random().nextInt(ciudades.size()));/*ciudades
-                .stream()
-                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
-                .findFirst().orElse(null);*/
+        Ciudad ciudadInicial = ciudades.get(new Random().nextInt(ciudades.size()));
 
         int idCiudadInicial = ciudadInicial.getID();
 
