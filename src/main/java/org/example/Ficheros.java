@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,31 +63,23 @@ public class Ficheros {
         return grafo;
     }
 
-    public static void crearArchivoTSP(Integer size) {
+   public static void crearArchivoTSP(Integer size) {
         File dir, file;
+        ArrayList<Ciudad> puntos = new ArrayList<>();
+        puntos = RellenarPuntos(size);
 
-        if (estrategia == null) {
-            dir = new File(System.getProperty("user.dir") + File.separator + "dataset" + File.separator + "dataset" + size + ".tsp");
-            dir.mkdirs();
 
-            file = new File(dir.getPath() + File.separator + "dataset" + size + ".tsp");
+        dir = new File(System.getProperty("user.dir") + File.separator + "dataset" + File.separator + "dataset" + size + ".tsp");
+        dir.mkdirs();
 
-            puntos = rellenarPuntos(size, peorCaso);
-        } else {
-            dir = new File(System.getProperty("user.dir") + File.separator + "dataset" + File.separator + estrategia + ".tsp");
-            dir.mkdirs();
+        file = new File(dir.getPath() + File.separator + "dataset" + size + ".tsp");
 
-            file = new File(dir.getPath() + File.separator + estrategia + ".tsp");
-
-            puntos = dataSet;
-            size = puntos.size();
-        }
 
         String filePath = file.toString();
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-            writer.write("NAME: " + (estrategia != null ? estrategia : ("dataset" + size)) + ".tsp");
+            writer.write("NAME: " + ("dataset" + size) + ".tsp");
             writer.newLine();
             writer.write("TYPE: TSP");
             writer.newLine();
@@ -111,6 +104,26 @@ public class Ficheros {
             Logger.getLogger(Ficheros.class.getName()).log(Level.SEVERE, "ERROR ARCHIVOS TSP", e);
         }
 
+    }
+    public static ArrayList<Ciudad> RellenarPuntos(int n) {
+        ArrayList<Ciudad> p = new ArrayList<>();
+
+        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
+
+        int num, den;
+        double x, y, aux1;
+
+        for (int i = 0; i < n; i++) {
+            num = rand.nextInt(4000) + 1; //genera un número aleatorio entre 1 y 4000
+            den = rand.nextInt(11) + 7; //genera un aleatorio entre 7 y 17
+            x = num / ((double) den + 0.37); //division con decimales
+            y = (rand.nextInt(4000) + 1) / ((double) (rand.nextInt(11) + 7) + 0.37);
+            Ciudad pn = new Ciudad(x, y, i + 1);
+            p.add(pn);
+        }
+
+        return p;
     }
 
 

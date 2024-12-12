@@ -19,6 +19,7 @@ public class Auxiliares {
         CrearArchivo.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             System.out.println("Crear Archivo");
+            CrearArchivo();
         });
 
         JButton CargarArchivo = new JButton("Cargar Archivo");
@@ -153,16 +154,20 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
+
         //double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
-        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
+        //double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
+        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
         //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
+
+
+
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
                     {"Bidireccional exhaustivo",0, 12249, 0.2317},
-                    {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
+                    {"Unidireccional con poda",0, 2386, 0.1479},
                     {"Bidireccional con poda",0, 2947, 0.1571}
         };
 
@@ -186,4 +191,27 @@ public class Auxiliares {
 
     }
 
+    public static void CrearArchivo() {
+        JFrame CrearArchivo = new JFrame("Crear Archivo");
+        CrearArchivo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        CrearArchivo.setSize(310, 300);
+        CrearArchivo.setLayout(null);
+        CrearArchivo.setLocationRelativeTo(null);
+
+        String input = JOptionPane.showInputDialog(CrearArchivo, "Ingrese el tamaño del dataset:", "Entrada de Datos", JOptionPane.QUESTION_MESSAGE);
+        if (input != null && !input.isEmpty()) {
+            try {
+                int size = Integer.parseInt(input);
+                // Llamar al método que crea el archivo con el tamaño especificado
+                Ficheros.crearArchivoTSP(size);
+                JOptionPane.showMessageDialog(CrearArchivo, "Archivo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                g = Ficheros.leerFichero("dataset" + size + ".tsp");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(CrearArchivo, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(CrearArchivo, "No se ingresó ningún dato.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
 }

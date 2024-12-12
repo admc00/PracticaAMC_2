@@ -38,7 +38,12 @@ public class BusquedaVorazExhausitvaUni {
         System.out.println("Número de ciudades visitadas: " + ruta.size());
         System.out.println("Coste: " + coste);
 
+
+
+        RutaPanel.mostrarRuta(ruta);
+
         return coste;
+
     }
 
     private static Ciudad encontrarCiudadMasCercana(Grafo grafo, Ciudad ciudadActual) {
@@ -62,7 +67,6 @@ public class BusquedaVorazExhausitvaUni {
         }
 
         coste += pesoMinimo;
-
         return ciudadMasCercana;
     }
 }
