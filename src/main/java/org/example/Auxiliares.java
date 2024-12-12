@@ -163,16 +163,9 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        var g1 = new Grafo(g);
-        var g2 = new Grafo(g);
-        var g3 = new Grafo(g);
-        var g4 = new Grafo(g);
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
 
-
-
-        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g1);
-
-        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g2);
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
 
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
 
@@ -185,7 +178,7 @@ public class Auxiliares {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
                     {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
                     {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
-                    {"Bidireccional con poda",0, 2947, 0.1571}
+                    {"Bidireccional con poda",costeMinimoPOB, 2947, 0.1571}
         };
 
         JTable table = new JTable(data, columnNames);
