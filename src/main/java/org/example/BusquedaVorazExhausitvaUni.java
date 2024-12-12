@@ -42,6 +42,8 @@ public class BusquedaVorazExhausitvaUni {
 
         RutaPanel.mostrarRuta(ruta);
 
+
+
         return coste;
 
     }

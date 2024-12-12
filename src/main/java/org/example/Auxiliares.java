@@ -154,11 +154,14 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-
-        //double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
-        //double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
+        g.resetearGrafo();
         double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
-        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
+        g.resetearGrafo();
+        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
+        g.resetearGrafo();
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
+        g.resetearGrafo();
 
 
 
@@ -166,9 +169,9 @@ public class Auxiliares {
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
-                    {"Bidireccional exhaustivo",0, 12249, 0.2317},
-                    {"Unidireccional con poda",0, 2386, 0.1479},
-                    {"Bidireccional con poda",0, 2947, 0.1571}
+                    {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
+                    {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
+                    {"Bidireccional con poda",costeMinimoPOB, 2947, 0.1571}
         };
 
         JTable table = new JTable(data, columnNames);
