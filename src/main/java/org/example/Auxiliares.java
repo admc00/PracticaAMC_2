@@ -19,6 +19,7 @@ public class Auxiliares {
         CrearArchivo.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             System.out.println("Crear Archivo");
+            CrearArchivo();
         });
 
         JButton CargarArchivo = new JButton("Cargar Archivo");
@@ -119,14 +120,6 @@ public class Auxiliares {
             nuevaVentana.setVisible(false);
             Menu();
         });
-        JButton almonte5 = new JButton("almonte5");
-        almonte5.addActionListener(e -> {
-            // Código a ejecutar cuando se haga clic en el botón
-            Ficheros.leerFichero("almonte5.tsp");
-            g = Ficheros.leerFichero("almonte5.tsp");
-            nuevaVentana.setVisible(false);
-            Menu();
-        });
         JButton salir = new JButton("Salir");
         salir.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
@@ -140,15 +133,13 @@ public class Auxiliares {
         ch150.setBounds(50, 90, 200, 30);
         d493.setBounds(50, 130, 200, 30);
         d657.setBounds(50, 170, 200, 30);
-        almonte5.setBounds(50, 210, 200, 30);
-        salir.setBounds(50, 250, 200, 30);
+        salir.setBounds(50, 210, 200, 30);
 
         nuevaVentana.add(berlin52);
         nuevaVentana.add(ch130);
         nuevaVentana.add(ch150);
         nuevaVentana.add(d493);
         nuevaVentana.add(d657);
-        nuevaVentana.add(almonte5);
         nuevaVentana.add(salir);
 
 
@@ -164,12 +155,14 @@ public class Auxiliares {
         ComprobarEstrategias.setLocationRelativeTo(null);
 
         double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
-
-        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
-
-        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
-
+        g.resetearGrafo();
         double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
+        g.resetearGrafo();
+        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
+        g.resetearGrafo();
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
+        g.resetearGrafo();
+
 
 
 
@@ -201,4 +194,27 @@ public class Auxiliares {
 
     }
 
+    public static void CrearArchivo() {
+        JFrame CrearArchivo = new JFrame("Crear Archivo");
+        CrearArchivo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        CrearArchivo.setSize(310, 300);
+        CrearArchivo.setLayout(null);
+        CrearArchivo.setLocationRelativeTo(null);
+
+        String input = JOptionPane.showInputDialog(CrearArchivo, "Ingrese el tamaño del dataset:", "Entrada de Datos", JOptionPane.QUESTION_MESSAGE);
+        if (input != null && !input.isEmpty()) {
+            try {
+                int size = Integer.parseInt(input);
+                // Llamar al método que crea el archivo con el tamaño especificado
+                Ficheros.crearArchivoTSP(size);
+                JOptionPane.showMessageDialog(CrearArchivo, "Archivo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                g = Ficheros.leerFichero("dataset" + size + ".tsp");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(CrearArchivo, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(CrearArchivo, "No se ingresó ningún dato.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
 }

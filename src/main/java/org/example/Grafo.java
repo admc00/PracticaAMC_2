@@ -87,6 +87,12 @@ public class Grafo {
         return relaciones.keySet();
     }
 
+    public void resetearGrafo() {
+        for (Ciudad ciudad : obtenerCiudades()) {
+            ciudad.setVisitada(false);
+        }
+    }
+
     @Override
     public String toString() {
         String grafo_string = "Grafo: {\n\n";
