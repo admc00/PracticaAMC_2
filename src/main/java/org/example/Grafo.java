@@ -32,7 +32,7 @@ public class Grafo {
      *
      * @param ciudad1 Ciudad de inicio del camino.
      * @param ciudad2 Ciudad final del camino.
-     * @param camino El camino a agregar.
+     * @param camino  El camino a agregar.
      */
     public void agregarCamino(Ciudad ciudad1, Ciudad ciudad2, Camino camino) {
         // Agregar las ciudades si no existen
@@ -84,13 +84,19 @@ public class Grafo {
         return relaciones.keySet();
     }
 
+    /**
+     *
+     */
     public void resetearGrafo() {
         for (Ciudad ciudad : obtenerCiudades()) {
             ciudad.setVisitada(false);
         }
     }
 
-    public void ordenarPorCoordenadaX(){
+    /**
+     *
+     */
+    public void ordenarPorCoordenadaX() {
         List<Ciudad> ciudades = new ArrayList<>(relaciones.keySet());
         ciudades.sort(Comparator.comparingDouble(Ciudad::getX));
         Map<Ciudad, Set<Camino>> sortedRelaciones = new LinkedHashMap<>();

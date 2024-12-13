@@ -7,12 +7,12 @@ public class BusquedaVorazExhaustivaBi {
     private static List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
-    public static double costeMinimo(Grafo grafo) {
+    public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
         //if (ciudades.isEmpty()) return Collections.emptyList();
 
         // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
+        /*Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
                 .stream()
                 .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
                 .findFirst().orElse(null);*/
@@ -60,14 +60,17 @@ public class BusquedaVorazExhaustivaBi {
             if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
-        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get());
+        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
         System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+
         return coste;
     }
 
-    // Método para buscar la ciudad más cercana a un extremo
+    // Metodo para buscar la ciudad más cercana a un extremo
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;

@@ -7,18 +7,18 @@ public class BusquedaVorazExhausitvaUni {
     private static ArrayList<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
-    public static double costeMinimo(Grafo grafo) {
-        List<Ciudad> ciudades = new ArrayList<>(grafo.obtenerCiudades());
-        if (ciudades.isEmpty()) {
+    public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        Set<Ciudad> ciudades = grafo.obtenerCiudades();
+        /*if (ciudades.isEmpty()) {
             return 0;
-        }
+        }*/
 
         // Elegir una ciudad aleatoria para comenzar
-        Ciudad ciudadActual = ciudades.get(new Random().nextInt(ciudades.size()));
+        Ciudad ciudadActual = ciudadInicial;
         ciudadActual.setVisitada(true);
         ruta.add(ciudadActual);
 
-        while (ruta.size() < grafo.obtenerCiudades().size()) {
+        while (ruta.size() < ciudades.size()) {
             Ciudad ciudadMasCercana = encontrarCiudadMasCercana(grafo, ciudadActual);
             if (ciudadMasCercana != null) {
                 ruta.add(ciudadMasCercana);
@@ -32,7 +32,7 @@ public class BusquedaVorazExhausitvaUni {
 
         }
 
-        coste = calcularCosteRuta(grafo, ruta);
+        //coste = calcularCosteRuta(grafo, ruta);
 
         // Imprimir la ruta
         System.out.println("Ruta: " + ruta);
@@ -42,7 +42,7 @@ public class BusquedaVorazExhausitvaUni {
 
 
 
-        RutaPanel.mostrarRuta(ruta);
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
 
         return coste;
 
@@ -54,7 +54,7 @@ public class BusquedaVorazExhausitvaUni {
         double pesoMinimo = Double.MAX_VALUE;
 
 
-        Ciudad ciudadVecina = null;
+        Ciudad ciudadVecina;
         for (Camino camino : caminos) {
             Ciudad C1 = camino.getC1();
             Ciudad C2 = camino.getC2();
@@ -68,25 +68,25 @@ public class BusquedaVorazExhausitvaUni {
 
         }
 
-        //coste += pesoMinimo;
+        coste += pesoMinimo;
 
         return ciudadMasCercana;
     }
 
-    private static double calcularCosteRuta(Grafo grafo, List<Ciudad> ruta) {
-        double costeTotal = 0;
-        for (int i = 0; i < ruta.size() - 1; i++) {
-            Ciudad ciudadActual = ruta.get(i);
-            Ciudad ciudadSiguiente = ruta.get(i + 1);
-            Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
-            for (Camino camino : caminos) {
-                if ((camino.getC1().equals(ciudadActual) && camino.getC2().equals(ciudadSiguiente)) ||
-                        (camino.getC1().equals(ciudadSiguiente) && camino.getC2().equals(ciudadActual))) {
-                    costeTotal += camino.getPeso();
-                    break;
-                }
-            }
-        }
-        return costeTotal;
-    }
+//    private static double calcularCosteRuta(Grafo grafo, List<Ciudad> ruta) {
+//        double costeTotal = 0;
+//        for (int i = 0; i < ruta.size() - 1; i++) {
+//            Ciudad ciudadActual = ruta.get(i);
+//            Ciudad ciudadSiguiente = ruta.get(i + 1);
+//            Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
+//            for (Camino camino : caminos) {
+//                if ((camino.getC1().equals(ciudadActual) && camino.getC2().equals(ciudadSiguiente)) ||
+//                        (camino.getC1().equals(ciudadSiguiente) && camino.getC2().equals(ciudadActual))) {
+//                    costeTotal += camino.getPeso();
+//                    break;
+//                }
+//            }
+//        }
+//        return costeTotal;
+//    }
 }

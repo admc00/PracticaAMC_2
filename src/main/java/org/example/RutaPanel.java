@@ -2,7 +2,6 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.List;
 
 public class RutaPanel extends JPanel {
@@ -63,8 +62,8 @@ public class RutaPanel extends JPanel {
     }
 
 
-    public static void mostrarRuta(List<Ciudad> ciudades) {
-        JFrame frame = new JFrame("Ruta de Ciudades");
+    public static void mostrarRuta(List<Ciudad> ciudades, String heuristica) {
+        JFrame frame = new JFrame("Ruta de Ciudades " + heuristica);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);

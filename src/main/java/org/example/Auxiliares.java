@@ -2,10 +2,11 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Auxiliares {
 
-    private static Grafo g;
+    private static Grafo grafo;
 
     public static void Menu(){
         JFrame menu = new JFrame("Menú");
@@ -84,39 +85,42 @@ public class Auxiliares {
         JButton berlin52 = new JButton("Berlin52");
         berlin52.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            g = Ficheros.leerFichero("berlin52.tsp");
+            grafo = Ficheros.leerFichero("berlin52.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
         JButton ch130 = new JButton("Ch130");
         ch130.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            Ficheros.leerFichero("ch130.tsp");
-            g = Ficheros.leerFichero("ch130.tsp");
+            grafo = Ficheros.leerFichero("ch130.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
         JButton ch150 = new JButton("Ch150");
         ch150.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            Ficheros.leerFichero("ch150.tsp");
-            g = Ficheros.leerFichero("ch150.tsp");
+            grafo = Ficheros.leerFichero("ch150.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
         JButton d493 = new JButton("d493");
         d493.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            Ficheros.leerFichero("d493.tsp");
-            g = Ficheros.leerFichero("d493.tsp");
+            grafo = Ficheros.leerFichero("d493.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
         JButton d657 = new JButton("d657");
         d657.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
-            Ficheros.leerFichero("d657.tsp");
-            g = Ficheros.leerFichero("d657.tsp");
+            grafo = Ficheros.leerFichero("d657.tsp");
+            nuevaVentana.setVisible(false);
+            Menu();
+        });
+        JButton almonte5 = new JButton("almonte5");
+        almonte5.addActionListener(e -> {
+            // Código a ejecutar cuando se haga clic en el botón
+            grafo = Ficheros.leerFichero("almonte5.tsp");
             nuevaVentana.setVisible(false);
             Menu();
         });
@@ -133,13 +137,15 @@ public class Auxiliares {
         ch150.setBounds(50, 90, 200, 30);
         d493.setBounds(50, 130, 200, 30);
         d657.setBounds(50, 170, 200, 30);
-        salir.setBounds(50, 210, 200, 30);
+        almonte5.setBounds(50, 210, 200, 30);
+        salir.setBounds(50, 250, 200, 30);
 
         nuevaVentana.add(berlin52);
         nuevaVentana.add(ch130);
         nuevaVentana.add(ch150);
         nuevaVentana.add(d493);
         nuevaVentana.add(d657);
+        nuevaVentana.add(almonte5);
         nuevaVentana.add(salir);
 
 
@@ -154,18 +160,48 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        Grafo g2 = new Grafo(g);
-        g2.ordenarPorCoordenadaX();
+        // Declaracion ciudades iniciales generadas aleatoriamente
+        Ciudad ciudadInicial, ciudadInicialOrdenada;
+
+        // Reseteamos las ciudades del grafo desordenado en caso que haya sido usado previamente.
+        grafo.resetearGrafo();
+        /*
+         Generamos una ciudad inicial de forma aleatoria, usando como semilla el reloj
+         del sistema, (casi) garantizando asi un resultado diferente cada vez.
+        */
+        var ciudades = grafo.obtenerCiudades();
+        ciudadInicial = ciudades
+                .stream()
+                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
+                .findFirst().orElse(null);
+
+        // Ordenamos el grafo almacenandolo en un nuevo grafo
+        Grafo grafoOrd = new Grafo(grafo);
+        grafoOrd.ordenarPorCoordenadaX();
+        /*
+         Obtenemos la ciudad con mismo ID que la anteriormente
+         generada de forma aleatoria,
+         de el grafo ordenado, para asi no trabajar
+         con la ciudad asociada al grafo desordenado,
+         en el grafo ordenado.
+        */
+        ciudadInicialOrdenada = grafoOrd.obtenerCiudades()
+                .stream()
+                .filter(ciudad -> ciudad.getID() == ciudadInicial.getID())
+                .findFirst().orElse(null);
 
 
-        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g2);
-        g2.resetearGrafo();
-        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
-        g.resetearGrafo();
-        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g2);
-        g2.resetearGrafo();
-        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
-        g.resetearGrafo();
+        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+        grafo.resetearGrafo();
+
+        double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        grafoOrd.resetearGrafo();
+
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+        grafo.resetearGrafo();
+
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        grafoOrd.resetearGrafo();
 
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
@@ -189,7 +225,7 @@ public class Auxiliares {
 
         ComprobarEstrategias.add(salir, BorderLayout.SOUTH);
 
-            // Agregar la tabla al frame
+        // Agregar la tabla al frame
         ComprobarEstrategias.add(scrollPane, BorderLayout.CENTER);
 
         ComprobarEstrategias.setVisible(true);
@@ -207,10 +243,10 @@ public class Auxiliares {
         if (input != null && !input.isEmpty()) {
             try {
                 int size = Integer.parseInt(input);
-                // Llamar al método que crea el archivo con el tamaño especificado
+                // Llamar al metodo que crea el archivo con el tamaño especificado
                 Ficheros.crearArchivoTSP(size);
                 JOptionPane.showMessageDialog(CrearArchivo, "Archivo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                g = Ficheros.leerFichero("dataset" + size + ".tsp");
+                grafo = Ficheros.leerFichero("dataset" + size + ".tsp");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(CrearArchivo, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
