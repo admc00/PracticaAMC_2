@@ -36,10 +36,13 @@ public class BusquedaVorazPodaUni {
 
         }
 
+        coste = calcularCosteRuta(grafo, ruta);
+
         // Imprimir la ruta
         System.out.println("Ruta: " + ruta);
         System.out.println("\n");
         System.out.println("Número de ciudades visitadas: " + ruta.size());
+        System.out.println("Coste: " + coste);
 
         return coste;
     }
@@ -55,18 +58,36 @@ public class BusquedaVorazPodaUni {
             Ciudad C1 = camino.getC1();
             Ciudad C2 = camino.getC2();
             ciudadVecina = C1.equals(ciudadActual) ? C2 : C1;
+            if (!ciudadVecina.esVisitada()) {
+                if (camino.getPeso() < pesoMinimo) {
+                    pesoMinimo = camino.getPeso();
+                    ciudadMasCercana = ciudadVecina;
+                }
+            }
 
             // Poda
             if(Math.abs(ciudadActual.getX() - ciudadVecina.getX()) > pesoMinimo) {break;}
-
-            if (!ciudadVecina.esVisitada() && camino.getPeso() < pesoMinimo) {
-                pesoMinimo = camino.getPeso();
-                ciudadMasCercana = ciudadVecina;
-            }
         }
 
-        coste += pesoMinimo;
+        //coste += pesoMinimo;
 
         return ciudadMasCercana;
+    }
+
+    private static double calcularCosteRuta(Grafo grafo, List<Ciudad> ruta) {
+        double costeTotal = 0;
+        for (int i = 0; i < ruta.size() - 1; i++) {
+            Ciudad ciudadActual = ruta.get(i);
+            Ciudad ciudadSiguiente = ruta.get(i + 1);
+            Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
+            for (Camino camino : caminos) {
+                if ((camino.getC1().equals(ciudadActual) && camino.getC2().equals(ciudadSiguiente)) ||
+                        (camino.getC1().equals(ciudadSiguiente) && camino.getC2().equals(ciudadActual))) {
+                    costeTotal += camino.getPeso();
+                    break;
+                }
+            }
+        }
+        return costeTotal;
     }
 }

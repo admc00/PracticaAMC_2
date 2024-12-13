@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Grafo {
 
@@ -13,6 +10,10 @@ public class Grafo {
     // Constructor
     public Grafo() {
         this.relaciones = new LinkedHashMap<>();
+    }
+
+    public Grafo(Grafo g) {
+        this.relaciones = new LinkedHashMap<>(g.relaciones);
     }
 
     /**
@@ -87,6 +88,16 @@ public class Grafo {
         for (Ciudad ciudad : obtenerCiudades()) {
             ciudad.setVisitada(false);
         }
+    }
+
+    public void ordenarPorCoordenadaX(){
+        List<Ciudad> ciudades = new ArrayList<>(relaciones.keySet());
+        ciudades.sort(Comparator.comparingDouble(Ciudad::getX));
+        Map<Ciudad, Set<Camino>> sortedRelaciones = new LinkedHashMap<>();
+        for (Ciudad ciudad : ciudades) {
+            sortedRelaciones.put(ciudad, relaciones.get(ciudad));
+        }
+        relaciones = sortedRelaciones;
     }
 
     @Override

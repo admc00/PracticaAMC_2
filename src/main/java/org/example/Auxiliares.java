@@ -154,16 +154,18 @@ public class Auxiliares {
         //ComprobarEstrategias.setLayout(null);
         ComprobarEstrategias.setLocationRelativeTo(null);
 
-        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g);
-        g.resetearGrafo();
-        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g);
-        g.resetearGrafo();
+        Grafo g2 = new Grafo(g);
+        g2.ordenarPorCoordenadaX();
+
+
+        double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(g2);
+        g2.resetearGrafo();
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(g);
         g.resetearGrafo();
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(g2);
+        g2.resetearGrafo();
         double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(g);
         g.resetearGrafo();
-
-
 
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
@@ -215,6 +217,10 @@ public class Auxiliares {
         } else {
             JOptionPane.showMessageDialog(CrearArchivo, "No se ingresó ningún dato.", "Error", JOptionPane.WARNING_MESSAGE);
         }
+
+    }
+
+    public void compararTodasLasEstrategias() {
 
     }
 }

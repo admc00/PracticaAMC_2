@@ -32,6 +32,8 @@ public class BusquedaVorazExhausitvaUni {
 
         }
 
+        coste = calcularCosteRuta(grafo, ruta);
+
         // Imprimir la ruta
         System.out.println("Ruta: " + ruta);
         System.out.println("\n");
@@ -41,8 +43,6 @@ public class BusquedaVorazExhausitvaUni {
 
 
         RutaPanel.mostrarRuta(ruta);
-
-
 
         return coste;
 
@@ -68,7 +68,25 @@ public class BusquedaVorazExhausitvaUni {
 
         }
 
-        coste += pesoMinimo;
+        //coste += pesoMinimo;
+
         return ciudadMasCercana;
+    }
+
+    private static double calcularCosteRuta(Grafo grafo, List<Ciudad> ruta) {
+        double costeTotal = 0;
+        for (int i = 0; i < ruta.size() - 1; i++) {
+            Ciudad ciudadActual = ruta.get(i);
+            Ciudad ciudadSiguiente = ruta.get(i + 1);
+            Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
+            for (Camino camino : caminos) {
+                if ((camino.getC1().equals(ciudadActual) && camino.getC2().equals(ciudadSiguiente)) ||
+                        (camino.getC1().equals(ciudadSiguiente) && camino.getC2().equals(ciudadActual))) {
+                    costeTotal += camino.getPeso();
+                    break;
+                }
+            }
+        }
+        return costeTotal;
     }
 }

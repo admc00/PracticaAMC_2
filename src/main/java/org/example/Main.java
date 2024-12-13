@@ -5,5 +5,11 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
         Auxiliares.Menu();
+        /*Grafo g = Ficheros.leerFichero("almonte5.tsp");
+        Grafo g2 = g;
+
+        g.ordenarPorCoordenadaX();
+        System.out.println(g2);
+        System.out.println(g);*/
     }
 }
