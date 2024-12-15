@@ -2,6 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Auxiliares {
@@ -42,6 +44,8 @@ public class Auxiliares {
         CompararEstrategias.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             System.out.println("Comparar Todas Las Estrategias");
+            menu.setVisible(false);
+            compararTodasLasEstrategias();
         });
         JButton Comparar2Estrategias = new JButton("Comparar 2 Estrategias");
         Comparar2Estrategias.addActionListener(e -> {
@@ -220,12 +224,12 @@ public class Auxiliares {
         grafoOrd.resetearGrafo();
 
 
-        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+        //double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
         grafo.resetearGrafo();
         grafoOrd.resetearGrafo();
 
 
-        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
         grafo.resetearGrafo();
         grafoOrd.resetearGrafo();
 
@@ -235,9 +239,9 @@ public class Auxiliares {
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
-                    {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
+                    {"Bidireccional exhaustivo",0, 12249, 0.2317},
                     {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
-                    {"Bidireccional con poda",costeMinimoPOB, 2947, 0.1571}
+                    {"Bidireccional con poda",0, 2947, 0.1571}
         };
 
         JTable table = new JTable(data, columnNames);
@@ -284,7 +288,58 @@ public class Auxiliares {
 
     }
 
-    public void compararTodasLasEstrategias() {
+    public static void compararTodasLasEstrategias() {
+        JFrame CompararTodasLasEstrategias = new JFrame("Comparar Todas Las Estrategias");
+        CompararTodasLasEstrategias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        CompararTodasLasEstrategias.setSize(600, 400);
+        CompararTodasLasEstrategias.setLocationRelativeTo(null);
 
+        String[] columnNames = {"Tamaño", "Estrategia", "Tiempo Medio (ms)"};
+        List<Object[]> data = new ArrayList<>();
+
+        int[] tamanos = {50, 100, 200}; // Ejemplo de tamaños de dataset
+        int numExperimentos = 10;
+
+        for (int tamano : tamanos) {
+            for (int i = 0; i < numExperimentos; i++) {
+                Ficheros.crearArchivoTSP(tamano);
+                grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                long startTime = System.currentTimeMillis();
+                BusquedaVorazExhausitvaUni.costeMinimo(grafo, obtenerCiudadInicial(grafo));
+                long endTime = System.currentTimeMillis();
+                data.add(new Object[]{tamano, "Unidireccional Exhaustivo", (endTime - startTime)});
+
+                grafo.resetearGrafo();
+
+                startTime = System.currentTimeMillis();
+                BusquedaVorazPodaUni.costeMinimo(grafo, obtenerCiudadInicial(grafo));
+                endTime = System.currentTimeMillis();
+                data.add(new Object[]{tamano, "Unidireccional con Poda", (endTime - startTime)});
+
+                grafo.resetearGrafo();
+            }
+        }
+
+        JTable table = new JTable(data.toArray(new Object[0][]), columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
+        JButton salir = new JButton("Salir");
+        salir.addActionListener(e -> {
+            CompararTodasLasEstrategias.setVisible(false);
+            Menu();
+        });
+
+        CompararTodasLasEstrategias.add(salir, BorderLayout.SOUTH);
+        CompararTodasLasEstrategias.add(scrollPane, BorderLayout.CENTER);
+        CompararTodasLasEstrategias.setVisible(true);
     }
+
+    private static Ciudad obtenerCiudadInicial(Grafo grafo) {
+        var ciudades = grafo.obtenerCiudades();
+        return ciudades.stream()
+                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
+                .findFirst().orElse(null);
+    }
+
 }

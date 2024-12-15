@@ -45,7 +45,7 @@ public class BusquedaVorazPodaUni {
         System.out.println("Número de ciudades visitadas: " + ruta.size());
         System.out.println("Coste: " + coste);*/
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
 
         return coste;
     }
@@ -58,18 +58,20 @@ public class BusquedaVorazPodaUni {
 
         Ciudad ciudadVecina;
         for (Camino camino : caminos) {
+
+
             Ciudad C1 = camino.getC1();
             Ciudad C2 = camino.getC2();
             ciudadVecina = C1.equals(ciudadActual) ? C2 : C1;
-            if (!ciudadVecina.esVisitada()) {
-                if (camino.getPeso() < pesoMinimo) {
-                    pesoMinimo = camino.getPeso();
-                    ciudadMasCercana = ciudadVecina;
+            //Poda
+            if(ciudadVecina.getX() - ciudadActual.getX() <= pesoMinimo){
+                if (!ciudadVecina.esVisitada()) {
+                    if (camino.getPeso() < pesoMinimo) {
+                        pesoMinimo = camino.getPeso();
+                        ciudadMasCercana = ciudadVecina;
+                    }
                 }
             }
-
-            // Poda
-            if(Math.abs(ciudadActual.getX() - ciudadVecina.getX()) > pesoMinimo) {break;}
         }
 
         coste += pesoMinimo;
