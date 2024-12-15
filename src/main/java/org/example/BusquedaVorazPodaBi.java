@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class BusquedaVorazPodaBi {
 
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
@@ -61,7 +61,7 @@ public class BusquedaVorazPodaBi {
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
         return coste;
     }
 

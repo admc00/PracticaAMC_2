@@ -5,17 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 public class BusquedaVorazPodaUni {
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         ruta.clear();
         coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
-        /*if (ciudades.isEmpty()) {
-            return 0;
-        }*/
-
         // Elegir una ciudad aleatoria para comenzar
         Ciudad ciudadActual = ciudadInicial;
         ciudadActual.setVisitada(true);
@@ -36,15 +32,6 @@ public class BusquedaVorazPodaUni {
 
 
         }
-
-        //coste = calcularCosteRuta(grafo, ruta);
-
-        // Imprimir la ruta
-        /*System.out.println("Ruta: " + ruta);
-        System.out.println("\n");
-        System.out.println("Número de ciudades visitadas: " + ruta.size());
-        System.out.println("Coste: " + coste);*/
-
         RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
 
         return coste;

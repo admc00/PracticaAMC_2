@@ -4,7 +4,7 @@ import java.util.*;
 
 public class BusquedaVorazExhaustivaBi {
 
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
@@ -59,7 +59,7 @@ public class BusquedaVorazExhaustivaBi {
 
         //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
 
         return coste;
     }
@@ -75,7 +75,6 @@ public class BusquedaVorazExhaustivaBi {
                 caminoMasCorto = camino;
             }
         }
-        //if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }
