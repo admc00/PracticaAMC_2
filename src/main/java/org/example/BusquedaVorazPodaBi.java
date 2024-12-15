@@ -6,20 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 public class BusquedaVorazPodaBi {
-    private static List<Ciudad> ruta = new ArrayList<>();
+
+    public static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
-    public static double costeMinimo(Grafo grafo) {
+    public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
-        //if (ciudades.isEmpty()) return Collections.emptyList();
 
-        // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
-                .stream()
-                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
-                .findFirst().orElse(null);*/
-
-        //int indiceCiudadInicial = ruta.indexOf(ciudadInicial);
         int idCiudadInicial = ciudadInicial.getID();
 
         // Inicializar variables
@@ -58,14 +53,16 @@ public class BusquedaVorazPodaBi {
             }
 
             // Marcar la ciudad como visitada
-            if (extremoInicio != null) extremoInicio.setVisitada(true);
-            if (extremoFin != null) extremoFin.setVisitada(true);
+            //if (extremoInicio != null) extremoInicio.setVisitada(true);
+            //if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
-        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get());
+        var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
-        System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+        //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
         return coste;
     }
 
@@ -73,21 +70,18 @@ public class BusquedaVorazPodaBi {
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
-        double pesoMinimo = Double.MAX_VALUE;
-
+        //double pesoMinimo = Double.MAX_VALUE;
         for (Camino camino : caminos) {
-            Ciudad ciudadDes = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
-
-            if (!ciudadDes.esVisitada() && camino.getPeso() < pesoMinimo) {
+            Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
+            if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                 caminoMasCorto = camino;
-                pesoMinimo = camino.getPeso();
+                //pesoMinimo = camino.getPeso();
             }
-
-            if(Math.abs(ciudadActual.getX() - ciudadDes.getX()) >= pesoMinimo) {break;}
-
-
+            if (Math.abs(ciudadActual.getX() - ciudadDestino.getX()) >= camino.getPeso()) {
+                break;
+            }
         }
-
+        if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }

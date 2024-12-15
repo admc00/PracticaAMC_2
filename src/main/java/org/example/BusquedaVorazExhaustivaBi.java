@@ -4,15 +4,13 @@ import java.util.*;
 
 public class BusquedaVorazExhaustivaBi {
 
-    private static List<Ciudad> ruta = new ArrayList<>();
-    private static double coste = 0;
+    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static double coste;
 
-    public static double costeMinimo(Grafo grafo) {
-        List<Ciudad> ciudades = new ArrayList<>(grafo.obtenerCiudades());
-        if (ciudades.isEmpty()) return 0;
-
-        // Elegir una ciudad inicial aleatoriamente
-        Ciudad ciudadInicial = ciudades.get(new Random().nextInt(ciudades.size()));
+    public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
+        Set<Ciudad> ciudades = grafo.obtenerCiudades();
 
         int idCiudadInicial = ciudadInicial.getID();
 
@@ -52,18 +50,21 @@ public class BusquedaVorazExhaustivaBi {
             }
 
             // Marcar la ciudad como visitada
-            if (extremoInicio != null) extremoInicio.setVisitada(true);
-            if (extremoFin != null) extremoFin.setVisitada(true);
+            //if (extremoInicio != null) extremoInicio.setVisitada(true);
+            //if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
         var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
-        System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+        //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+
         return coste;
     }
 
-    // Método para buscar la ciudad más cercana a un extremo
+    // Metodo para buscar la ciudad más cercana a un extremo
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
@@ -74,6 +75,7 @@ public class BusquedaVorazExhaustivaBi {
                 caminoMasCorto = camino;
             }
         }
+        if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }

@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Grafo {
 
@@ -35,7 +32,7 @@ public class Grafo {
      *
      * @param ciudad1 Ciudad de inicio del camino.
      * @param ciudad2 Ciudad final del camino.
-     * @param camino El camino a agregar.
+     * @param camino  El camino a agregar.
      */
     public void agregarCamino(Ciudad ciudad1, Ciudad ciudad2, Camino camino) {
         // Agregar las ciudades si no existen
@@ -45,10 +42,6 @@ public class Grafo {
         // Asociar el camino con ambas ciudades
         relaciones.get(ciudad1).add(camino);
         //relaciones.get(ciudad2).add(camino);
-    }
-
-    public void agregarTupla(Ciudad ciudad1, Set<Camino> caminos) {
-        relaciones.putIfAbsent(ciudad1, caminos);
     }
 
     /**
@@ -92,26 +85,43 @@ public class Grafo {
     }
 
     /**
-    * Reestablece las ciudades a no visitadas.
-    */
+     *
+     */
     public void resetearGrafo() {
         for (Ciudad ciudad : obtenerCiudades()) {
             ciudad.setVisitada(false);
         }
     }
 
+    public void borrarGrafo() {
+        relaciones.clear();
+    }
+
+    /**
+     *
+     */
+    public void ordenarPorCoordenadaX() {
+        List<Ciudad> ciudades = new ArrayList<>(relaciones.keySet());
+        ciudades.sort(Comparator.comparingDouble(Ciudad::getX));
+        Map<Ciudad, Set<Camino>> sortedRelaciones = new LinkedHashMap<>();
+        for (Ciudad ciudad : ciudades) {
+            sortedRelaciones.put(ciudad, relaciones.get(ciudad));
+        }
+        relaciones = sortedRelaciones;
+    }
+
     @Override
     public String toString() {
-        String grafo_string = "Grafo: {\n\n";
+        String grafo_string = "Grafo: {";
 
         for (Ciudad ciudad : obtenerCiudades()) {
-            grafo_string = grafo_string.concat("Ciudad: " + ciudad.toString() + " {");
+            grafo_string = grafo_string.concat("\n\tCiudad: " + ciudad.toString() + " {");
             for (Camino camino : obtenerCaminos(ciudad)) {
                 grafo_string = grafo_string.concat(camino.toString());
             }
-            grafo_string.concat("}\n\n");
+            grafo_string = grafo_string.concat("}");
         }
-
+        grafo_string = grafo_string.concat("}\n");
         return grafo_string;
     }
 }

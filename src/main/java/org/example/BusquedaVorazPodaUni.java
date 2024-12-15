@@ -2,26 +2,27 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class BusquedaVorazPodaUni {
-    private static ArrayList<Ciudad> ruta = new ArrayList<>();
+    public static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
-    public static double costeMinimo(Grafo grafo) {
-        List<Ciudad> ciudades = new ArrayList<>(grafo.obtenerCiudades());
-        if (ciudades.isEmpty()) {
+    public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
+        Set<Ciudad> ciudades = grafo.obtenerCiudades();
+        /*if (ciudades.isEmpty()) {
             return 0;
-        }
+        }*/
 
         // Elegir una ciudad aleatoria para comenzar
-        Ciudad ciudadActual = ciudades.get(new Random().nextInt(ciudades.size()));
+        Ciudad ciudadActual = ciudadInicial;
         ciudadActual.setVisitada(true);
         ruta.add(ciudadActual);
 
 
-        while (ruta.size() < grafo.obtenerCiudades().size()) {
+        while (ruta.size() < ciudades.size()) {
             Ciudad ciudadMasCercana = encontrarCiudadMasCercana(grafo, ciudadActual);
             if (ciudadMasCercana != null) {
                 ruta.add(ciudadMasCercana);
@@ -36,10 +37,15 @@ public class BusquedaVorazPodaUni {
 
         }
 
+        //coste = calcularCosteRuta(grafo, ruta);
+
         // Imprimir la ruta
-        System.out.println("Ruta: " + ruta);
+        /*System.out.println("Ruta: " + ruta);
         System.out.println("\n");
         System.out.println("Número de ciudades visitadas: " + ruta.size());
+        System.out.println("Coste: " + coste);*/
+
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
 
         return coste;
     }
@@ -50,23 +56,25 @@ public class BusquedaVorazPodaUni {
         double pesoMinimo = Double.MAX_VALUE;
 
 
-        Ciudad ciudadVecina = null;
+        Ciudad ciudadVecina;
         for (Camino camino : caminos) {
             Ciudad C1 = camino.getC1();
             Ciudad C2 = camino.getC2();
             ciudadVecina = C1.equals(ciudadActual) ? C2 : C1;
+            if (!ciudadVecina.esVisitada()) {
+                if (camino.getPeso() < pesoMinimo) {
+                    pesoMinimo = camino.getPeso();
+                    ciudadMasCercana = ciudadVecina;
+                }
+            }
 
             // Poda
             if(Math.abs(ciudadActual.getX() - ciudadVecina.getX()) > pesoMinimo) {break;}
-
-            if (!ciudadVecina.esVisitada() && camino.getPeso() < pesoMinimo) {
-                pesoMinimo = camino.getPeso();
-                ciudadMasCercana = ciudadVecina;
-            }
         }
 
         coste += pesoMinimo;
 
         return ciudadMasCercana;
     }
+
 }
