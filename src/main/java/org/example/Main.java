@@ -6,9 +6,9 @@ import java.util.List;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //Auxiliares.Menu();
+        Auxiliares.Menu();
 
-        Grafo g = Ficheros.leerFichero("almonte5.tsp");
+        /*Grafo g = Ficheros.leerFichero("almonte5.tsp");
         Grafo g2 = new Grafo(g);
         //System.out.println(g.obtenerCiudades().size());
 
@@ -67,6 +67,7 @@ public class Main {
         g2.ordenarPorCoordenadaX();
         System.out.println(g2);
         System.out.println(g);*/
+
     }
 
     private static void metod(String algoritmoNombre, List<Ciudad> ruta, double coste){

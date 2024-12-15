@@ -42,7 +42,7 @@ public class BusquedaVorazExhausitvaUni {
 
 
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
 
         return coste;
 
