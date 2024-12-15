@@ -63,6 +63,7 @@ public class BusquedaVorazPodaUni {
             Ciudad C1 = camino.getC1();
             Ciudad C2 = camino.getC2();
             ciudadVecina = C1.equals(ciudadActual) ? C2 : C1;
+            //Poda
             if(ciudadVecina.getX() - ciudadActual.getX() <= pesoMinimo){
                 if (!ciudadVecina.esVisitada()) {
                     if (camino.getPeso() < pesoMinimo) {
@@ -71,10 +72,6 @@ public class BusquedaVorazPodaUni {
                     }
                 }
             }
-
-
-            // Poda
-
         }
 
         coste += pesoMinimo;
