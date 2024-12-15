@@ -85,6 +85,9 @@ public class Auxiliares {
         JButton berlin52 = new JButton("Berlin52");
         berlin52.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("berlin52.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -92,6 +95,9 @@ public class Auxiliares {
         JButton ch130 = new JButton("Ch130");
         ch130.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("ch130.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -99,6 +105,9 @@ public class Auxiliares {
         JButton ch150 = new JButton("Ch150");
         ch150.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("ch150.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -106,6 +115,9 @@ public class Auxiliares {
         JButton d493 = new JButton("d493");
         d493.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("d493.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -113,6 +125,9 @@ public class Auxiliares {
         JButton d657 = new JButton("d657");
         d657.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("d657.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -120,6 +135,9 @@ public class Auxiliares {
         JButton almonte5 = new JButton("almonte5");
         almonte5.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
+            if(grafo != null){
+                grafo.borrarGrafo();
+            }
             grafo = Ficheros.leerFichero("almonte5.tsp");
             nuevaVentana.setVisible(false);
             Menu();
@@ -163,8 +181,9 @@ public class Auxiliares {
         // Declaracion ciudades iniciales generadas aleatoriamente
         Ciudad ciudadInicial, ciudadInicialOrdenada;
 
-        // Reseteamos las ciudades del grafo desordenado en caso que haya sido usado previamente.
-        grafo.resetearGrafo();
+        // Reseteamos las ciudades del grafo desordenado en caso de que haya sido usado previamente.
+        //grafo.resetearGrafo();
+
         /*
          Generamos una ciudad inicial de forma aleatoria, usando como semilla el reloj
          del sistema, (casi) garantizando asi un resultado diferente cada vez.
@@ -178,13 +197,14 @@ public class Auxiliares {
         // Ordenamos el grafo almacenandolo en un nuevo grafo
         Grafo grafoOrd = new Grafo(grafo);
         grafoOrd.ordenarPorCoordenadaX();
+
         /*
          Obtenemos la ciudad con mismo ID que la anteriormente
          generada de forma aleatoria,
-         de el grafo ordenado, para asi no trabajar
+         del grafo ordenado, para asi no trabajar
          con la ciudad asociada al grafo desordenado,
-         en el grafo ordenado.
-        */
+         en el grafo ordenado.*/
+
         ciudadInicialOrdenada = grafoOrd.obtenerCiudades()
                 .stream()
                 .filter(ciudad -> ciudad.getID() == ciudadInicial.getID())
@@ -193,15 +213,23 @@ public class Auxiliares {
 
         double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
         grafo.resetearGrafo();
+        grafoOrd.resetearGrafo();
 
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        grafo.resetearGrafo();
         grafoOrd.resetearGrafo();
+
 
         double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
         grafo.resetearGrafo();
+        grafoOrd.resetearGrafo();
+
 
         double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        grafo.resetearGrafo();
         grafoOrd.resetearGrafo();
+
+
 
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};

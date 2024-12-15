@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 public class BusquedaVorazPodaBi {
-    private static List<Ciudad> ruta = new ArrayList<>();
+    private final static List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
         //if (ciudades.isEmpty()) return Collections.emptyList();
 

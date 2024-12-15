@@ -93,6 +93,10 @@ public class Grafo {
         }
     }
 
+    public void borrarGrafo() {
+        relaciones.clear();
+    }
+
     /**
      *
      */
@@ -112,9 +116,9 @@ public class Grafo {
 
         for (Ciudad ciudad : obtenerCiudades()) {
             grafo_string = grafo_string.concat("Ciudad: " + ciudad.toString() + " {");
-            for (Camino camino : obtenerCaminos(ciudad)) {
+           /* for (Camino camino : obtenerCaminos(ciudad)) {
                 grafo_string = grafo_string.concat(camino.toString());
-            }
+            }*/
             grafo_string.concat("}\n\n");
         }
 

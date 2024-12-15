@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class BusquedaVorazPodaUni {
-    private static ArrayList<Ciudad> ruta = new ArrayList<>();
+    private final static ArrayList<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
         /*if (ciudades.isEmpty()) {
             return 0;
@@ -74,20 +76,4 @@ public class BusquedaVorazPodaUni {
         return ciudadMasCercana;
     }
 
-//    private static double calcularCosteRuta(Grafo grafo, List<Ciudad> ruta) {
-//        double costeTotal = 0;
-//        for (int i = 0; i < ruta.size() - 1; i++) {
-//            Ciudad ciudadActual = ruta.get(i);
-//            Ciudad ciudadSiguiente = ruta.get(i + 1);
-//            Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
-//            for (Camino camino : caminos) {
-//                if ((camino.getC1().equals(ciudadActual) && camino.getC2().equals(ciudadSiguiente)) ||
-//                        (camino.getC1().equals(ciudadSiguiente) && camino.getC2().equals(ciudadActual))) {
-//                    costeTotal += camino.getPeso();
-//                    break;
-//                }
-//            }
-//        }
-//        return costeTotal;
-//    }
 }

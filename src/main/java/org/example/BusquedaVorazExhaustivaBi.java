@@ -4,10 +4,12 @@ import java.util.*;
 
 public class BusquedaVorazExhaustivaBi {
 
-    private static List<Ciudad> ruta = new ArrayList<>();
-    private static double coste = 0;
+    private final static List<Ciudad> ruta = new ArrayList<>();
+    private static double coste;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        ruta.clear();
+        coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
         //if (ciudades.isEmpty()) return Collections.emptyList();
 
