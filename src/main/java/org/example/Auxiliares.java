@@ -675,7 +675,7 @@ public class Auxiliares {
                 grafoOrd.resetearGrafo();
 
                 if (costeEXU != costeEXB) {
-                    if (costeEXU > costeEXB) {
+                    if (costeEXU < costeEXB) {
                         victoriasUNI++;
                     }else {
                         victoriasBI++;
@@ -683,7 +683,7 @@ public class Auxiliares {
                 }
 
                 if (costePOU != costePOB) {
-                    if (costePOU > costePOB) {
+                    if (costePOU < costePOB) {
                         victoriasUNI++;
                     }else {
                         victoriasBI++;
