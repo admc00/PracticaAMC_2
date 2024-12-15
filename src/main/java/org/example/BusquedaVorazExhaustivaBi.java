@@ -9,10 +9,14 @@ public class BusquedaVorazExhaustivaBi {
 
     private static double tiempo;
 
+    private static double calculadas;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         long startTime = System.currentTimeMillis();
         ruta.clear();
         coste = 0;
+        calculadas = 0;
+
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
 
         int idCiudadInicial = ciudadInicial.getID();
@@ -74,6 +78,10 @@ public class BusquedaVorazExhaustivaBi {
         return tiempo;
     }
 
+    public static double getCalculadas() {
+        return calculadas;
+    }
+
     // Metodo para buscar la ciudad más cercana a un extremo
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
@@ -81,6 +89,7 @@ public class BusquedaVorazExhaustivaBi {
 
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
+            calculadas++;
             if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                 caminoMasCorto = camino;
             }

@@ -2,6 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,6 +11,7 @@ import java.util.Random;
 public class Auxiliares {
 
     private static Grafo grafo;
+    private static int eleccionAlgoritmo;
 
     public static void Menu(){
         JFrame menu = new JFrame("Menú");
@@ -51,6 +54,8 @@ public class Auxiliares {
         Comparar2Estrategias.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             System.out.println("Comparar 2 Estrategias");
+            menu.setVisible(false);
+            ElegirAlgoritmo();
         });
         JButton CompararUniBi = new JButton("Unidireccional vs Bidireccional");
         CompararUniBi.addActionListener(e -> {
@@ -212,19 +217,27 @@ public class Auxiliares {
 
 
         double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+        double tiempoEXU = BusquedaVorazExhausitvaUni.getTiempo();
+        double calculadasEXU = BusquedaVorazExhausitvaUni.getCalculadas();
         grafo.resetearGrafo();
 
 
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        double tiempoPOU = BusquedaVorazPodaUni.getTiempo();
+        double calculadasPOU = BusquedaVorazPodaUni.getCalculadas();
         grafoOrd.resetearGrafo();
 
 
         double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+        double tiempoEXB = BusquedaVorazExhaustivaBi.getTiempo();
+        double calculadasEXB = BusquedaVorazExhaustivaBi.getCalculadas();
         grafo.resetearGrafo();
 
 
 
         double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
+        double tiempoPOB = BusquedaVorazPodaBi.getTiempo();
+        double calculadasPOB = BusquedaVorazPodaBi.getCalculadas();
         grafoOrd.resetearGrafo();
 
 
@@ -232,10 +245,10 @@ public class Auxiliares {
 
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
-                    {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
-                    {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
-                    {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
-                    {"Bidireccional con poda",costeMinimoPOB, 2947, 0.1571}
+                    {"Unidireccional exhaustivo",costeMinimoEXU,calculadasEXU ,tiempoEXU },
+                    {"Bidireccional exhaustivo",costeMinimoEXB,calculadasEXB ,tiempoEXB },
+                    {"Unidireccional con poda",costeMinimoPOU,calculadasPOU ,tiempoPOU },
+                    {"Bidireccional con poda",costeMinimoPOB,calculadasPOB ,tiempoPOB }
         };
 
         JTable table = new JTable(data, columnNames);
@@ -348,9 +361,271 @@ public class Auxiliares {
         CompararTodasLasEstrategias.setVisible(true);
     }
 
-    public static void comparar2Estrategias(){
+    public static void comparar2Estrategias(int eleccionAlgoritmo) {
+        JFrame Comparar2Estrategias = new JFrame("Comparar 2 Estrategias");
+        Comparar2Estrategias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Comparar2Estrategias.setSize(600, 400);
+        Comparar2Estrategias.setLocationRelativeTo(null);
+
+        String[] columnNames = {"Tamaño", "Estrategia", "Tiempo Medio (ms)", "Distancia Media"};
+        List<Object[]> data = new ArrayList<>();
+
+        Ciudad ciudadInicial;
+
+        int[] tamanos = {50, 100, 200}; // Example dataset sizes
+        int numExperimentos = 10;
 
 
+        switch (eleccionAlgoritmo){
+            case 1:{
+                for (int tamano : tamanos) {
+                    double tiempoExhaustivoUni = 0.0;
+                    double distanciaExhaustivoUni = 0.0;
+                    double tiempoPodaUni = 0.0;
+                    double distanciaPodaUni = 0.0;
+
+                    for (int i = 0; i < numExperimentos; i++) {
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+                        Grafo grafoOrd = new Grafo(grafo);
+                        grafoOrd.ordenarPorCoordenadaX();
+
+                        BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoUni += BusquedaVorazExhausitvaUni.getCalculadas();
+                        tiempoExhaustivoUni += BusquedaVorazExhausitvaUni.getTiempo();
+                        grafo.resetearGrafo();
+
+                        BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaUni += BusquedaVorazPodaUni.getCalculadas();
+                        tiempoPodaUni += BusquedaVorazPodaUni.getTiempo();
+                        grafoOrd.resetearGrafo();
+                    }
+                    data.add(new Object[]{tamano, "Unidireccional Exhaustivo", tiempoExhaustivoUni / numExperimentos, distanciaExhaustivoUni / numExperimentos});
+                    data.add(new Object[]{tamano, "Unidireccional con Poda", tiempoPodaUni / numExperimentos, distanciaPodaUni / numExperimentos});
+                }
+                break;
+            }
+
+            case 2: {
+                for (int tamano : tamanos) {
+                    double tiempoExhaustivoUni = 0.0;
+                    double distanciaExhaustivoUni = 0.0;
+                    double tiempoExhaustivoBi = 0.0;
+                    double distanciaExhaustivoBi = 0.0;
+
+                    for (int i = 0; i < numExperimentos; i++) {
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+
+                        BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoUni += BusquedaVorazExhausitvaUni.getCalculadas();
+                        tiempoExhaustivoUni += BusquedaVorazExhausitvaUni.getTiempo();
+                        grafo.resetearGrafo();
+
+                        BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoBi += BusquedaVorazExhaustivaBi.getCalculadas();
+                        tiempoExhaustivoBi += BusquedaVorazExhaustivaBi.getTiempo();
+                        grafo.resetearGrafo();
+
+                    }
+                    data.add(new Object[]{tamano, "Unidireccional Exhaustivo", tiempoExhaustivoUni / numExperimentos, distanciaExhaustivoUni / numExperimentos});
+                    data.add(new Object[]{tamano, "Bidireccional Exhaustivo", tiempoExhaustivoBi / numExperimentos, distanciaExhaustivoBi / numExperimentos});
+                }
+                break;
+            }
+
+            case 3:{
+                for(int tamano : tamanos){
+                    double tiempoExhaustivoUni = 0.0;
+                    double distanciaExhaustivoUni = 0.0;
+                    double tiempoPodaBi = 0.0;
+                    double distanciaPodaBi = 0.0;
+
+                    for(int i = 0; i < numExperimentos; i++){
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+                        Grafo grafoOrd = new Grafo(grafo);
+                        grafoOrd.ordenarPorCoordenadaX();
+
+                        BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoUni += BusquedaVorazExhausitvaUni.getCalculadas();
+                        tiempoExhaustivoUni += BusquedaVorazExhausitvaUni.getTiempo();
+                        grafo.resetearGrafo();
+
+                        BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaBi += BusquedaVorazPodaBi.getCalculadas();
+                        tiempoPodaBi += BusquedaVorazPodaBi.getTiempo();
+                        grafoOrd.resetearGrafo();
+                    }
+                    data.add(new Object[]{tamano, "Unidireccional Exhaustivo", tiempoExhaustivoUni / numExperimentos, distanciaExhaustivoUni / numExperimentos});
+                    data.add(new Object[]{tamano, "Bidireccional con Poda", tiempoPodaBi / numExperimentos, distanciaPodaBi / numExperimentos});
+                }
+                break;
+            }
+
+            case 4:{
+                for(int tamano : tamanos) {
+                    double tiempoPodaUni = 0.0;
+                    double distanciaPodaUni = 0.0;
+                    double tiempoExhaustivoBi = 0.0;
+                    double distanciaExhaustivoBi = 0.0;
+
+                    for (int i = 0; i < numExperimentos; i++) {
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+                        Grafo grafoOrd = new Grafo(grafo);
+                        grafoOrd.ordenarPorCoordenadaX();
+
+                        BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaUni += BusquedaVorazPodaUni.getCalculadas();
+                        tiempoPodaUni += BusquedaVorazPodaUni.getTiempo();
+                        grafoOrd.resetearGrafo();
+
+                        BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoBi += BusquedaVorazExhaustivaBi.getCalculadas();
+                        tiempoExhaustivoBi += BusquedaVorazExhaustivaBi.getTiempo();
+                        grafo.resetearGrafo();
+
+                    }
+                    data.add(new Object[]{tamano, "Unidireccional con Poda", tiempoPodaUni / numExperimentos, distanciaPodaUni / numExperimentos});
+                    data.add(new Object[]{tamano, "Bidireccional Exhaustivo", tiempoExhaustivoBi / numExperimentos, distanciaExhaustivoBi / numExperimentos});
+                }
+                break;
+            }
+
+            case 5: {
+                for (int tamano : tamanos) {
+                    double tiempoPodaUni = 0.0;
+                    double distanciaPodaUni = 0.0;
+                    double tiempoPodaBi = 0.0;
+                    double distanciaPodaBi = 0.0;
+
+                    for (int i = 0; i < numExperimentos; i++) {
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+                        Grafo grafoOrd = new Grafo(grafo);
+                        grafoOrd.ordenarPorCoordenadaX();
+
+                        BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaUni += BusquedaVorazPodaUni.getCalculadas();
+                        tiempoPodaUni += BusquedaVorazPodaUni.getTiempo();
+                        grafoOrd.resetearGrafo();
+
+                        BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaBi += BusquedaVorazPodaBi.getCalculadas();
+                        tiempoPodaBi += BusquedaVorazPodaBi.getTiempo();
+                        grafoOrd.resetearGrafo();
+
+                    }
+                    data.add(new Object[]{tamano, "Unidireccional con Poda", tiempoPodaUni / numExperimentos, distanciaPodaUni / numExperimentos});
+                    data.add(new Object[]{tamano, "Bidireccional con Poda", tiempoPodaBi / numExperimentos, distanciaPodaBi / numExperimentos});
+                }
+                break;
+            }
+
+            case 6: {
+                for (int tamano : tamanos) {
+                    double tiempoExhaustivoBi = 0.0;
+                    double distanciaExhaustivoBi = 0.0;
+                    double tiempoPodaBi = 0.0;
+                    double distanciaPodaBi = 0.0;
+
+                    for (int i = 0; i < numExperimentos; i++) {
+                        Ficheros.crearArchivoTSP(tamano);
+                        grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                        ciudadInicial = obtenerCiudadInicial(grafo);
+                        Grafo grafoOrd = new Grafo(grafo);
+                        grafoOrd.ordenarPorCoordenadaX();
+
+                        BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+                        distanciaExhaustivoBi += BusquedaVorazExhaustivaBi.getCalculadas();
+                        tiempoExhaustivoBi += BusquedaVorazExhaustivaBi.getTiempo();
+                        grafo.resetearGrafo();
+
+                        BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicial);
+                        distanciaPodaBi += BusquedaVorazPodaBi.getCalculadas();
+                        tiempoPodaBi += BusquedaVorazPodaBi.getTiempo();
+                        grafoOrd.resetearGrafo();
+
+                    }
+                    data.add(new Object[]{tamano, "Bidireccional Exhaustivo", tiempoExhaustivoBi / numExperimentos, distanciaExhaustivoBi / numExperimentos});
+                    data.add(new Object[]{tamano, "Bidireccional con Poda", tiempoPodaBi / numExperimentos, distanciaPodaBi / numExperimentos});
+                }
+            }
+        }
+
+        JTable table = new JTable(data.toArray(new Object[0][]), columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
+        JButton salir = new JButton("Salir");
+        salir.addActionListener(e -> {
+            Comparar2Estrategias.setVisible(false);
+            Menu();
+        });
+
+        Comparar2Estrategias.add(salir, BorderLayout.SOUTH);
+        Comparar2Estrategias.add(scrollPane, BorderLayout.CENTER);
+        Comparar2Estrategias.setVisible(true);
+    }
+
+    private static void ElegirAlgoritmo(){
+        JFrame ElegirAlgoritmo = new JFrame("Elegir Algoritmo");
+        ElegirAlgoritmo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ElegirAlgoritmo.setSize(400, 300);
+        ElegirAlgoritmo.setLocationRelativeTo(null);
+        ElegirAlgoritmo.setLayout(new GridLayout(0, 1));
+
+        JCheckBox alg1 = new JCheckBox("Unidireccional Exhaustivo");
+        JCheckBox alg2 = new JCheckBox("Unidireccional con Poda");
+        JCheckBox alg3 = new JCheckBox("Bidireccional Exhaustivo");
+        JCheckBox alg4 = new JCheckBox("Bidireccional con Poda");
+
+        JButton confirmar = new JButton("Confirmar");
+
+
+        ElegirAlgoritmo.add(alg1);
+        ElegirAlgoritmo.add(alg2);
+        ElegirAlgoritmo.add(alg3);
+        ElegirAlgoritmo.add(alg4);
+        ElegirAlgoritmo.add(confirmar);
+
+        ElegirAlgoritmo.setVisible(true);
+
+        confirmar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int seleccion = 0;
+                if (alg1.isSelected()) seleccion++;
+                if (alg2.isSelected()) seleccion++;
+                if (alg3.isSelected()) seleccion++;
+                if (alg4.isSelected()) seleccion++;
+
+                if (seleccion == 2) {
+                    eleccionAlgoritmo = getEleccionAlgoritmo(alg1, alg2, alg3, alg4);
+                    JOptionPane.showMessageDialog(ElegirAlgoritmo, "Algortimos seleccionados correctamente.");
+                    ElegirAlgoritmo.setVisible(false);
+                    comparar2Estrategias(eleccionAlgoritmo);
+
+                } else {
+                    JOptionPane.showMessageDialog(ElegirAlgoritmo, "Por favor, seleccione exactamente dos algoritmos.");
+                }
+            }
+        });
+    }
+    private static int getEleccionAlgoritmo(JCheckBox alg1, JCheckBox alg2, JCheckBox alg3, JCheckBox alg4) {
+        if (alg1.isSelected() && alg2.isSelected()) return 1;
+        if (alg1.isSelected() && alg3.isSelected()) return 2;
+        if (alg1.isSelected() && alg4.isSelected()) return 3;
+        if (alg2.isSelected() && alg3.isSelected()) return 4;
+        if (alg2.isSelected() && alg4.isSelected()) return 5;
+        if (alg3.isSelected() && alg4.isSelected()) return 6;
+        return -1;
     }
 
     private static Ciudad obtenerCiudadInicial(Grafo grafo) {
