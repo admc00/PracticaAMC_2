@@ -38,7 +38,6 @@ public class Auxiliares {
             System.out.println("Comprobar Estrategias");
             menu.setVisible(false);
             ComprobarEstrategias();
-
         });
         JButton CompararEstrategias = new JButton("Comparar Todas Las Estrategias");
         CompararEstrategias.addActionListener(e -> {
@@ -56,6 +55,8 @@ public class Auxiliares {
         CompararUniBi.addActionListener(e -> {
             // Código a ejecutar cuando se haga clic en el botón
             System.out.println("Unidireccional vs Bidireccional");
+            menu.setVisible(false);
+            compararUniBi();
         });
 
 
@@ -351,6 +352,93 @@ public class Auxiliares {
     public static void comparar2Estrategias(){
 
 
+    }
+
+    private static void compararUniBi() {
+        JFrame CompararUniBi = new JFrame("Comparar Unidireccional vs Bidireccional");
+        CompararUniBi.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        CompararUniBi.setSize(600, 400);
+        CompararUniBi.setLocationRelativeTo(null);
+
+        String[] columnNames = {"Tamaño", "Vencedor", "Tiempo Medio (ms)", "Nº victorias"};
+        List<Object[]> data = new ArrayList<>();
+
+        Ciudad ciudadInicial;
+
+        int[] tamanos = {50, 100, 200}; //
+        int numExperimentos = 10;
+
+        for (int tamano : tamanos) {
+            Double tiempoExhaustivoUni = 0.0;
+            Double tiempoPodaUni = 0.0;
+            Double tiempoExhaustivoBi = 0.0;
+            Double tiempoPodaBi = 0.0;
+
+            int victoriasUNI = 0, victoriasBI = 0;
+
+            for (int i = 0; i < numExperimentos; i++) {
+                Ficheros.crearArchivoTSP(tamano);
+                grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
+                ciudadInicial = obtenerCiudadInicial(grafo);
+                Grafo grafoOrd = new Grafo(grafo);
+                grafoOrd.ordenarPorCoordenadaX();
+
+                double costeEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+                tiempoExhaustivoUni += BusquedaVorazExhausitvaUni.getTiempo();
+                grafo.resetearGrafo();
+
+                double costePOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicial);
+                tiempoPodaUni += BusquedaVorazPodaUni.getTiempo();
+                grafoOrd.resetearGrafo();
+
+                double costeEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+                tiempoExhaustivoBi += BusquedaVorazExhaustivaBi.getTiempo();
+                grafo.resetearGrafo();
+
+                double costePOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicial);
+                tiempoPodaBi += BusquedaVorazPodaBi.getTiempo();
+                grafoOrd.resetearGrafo();
+
+                if (costeEXU != costeEXB) {
+                    if (costeEXU > costeEXB) {
+                        victoriasUNI++;
+                    }else {
+                        victoriasBI++;
+                    }
+                }
+
+                if (costePOU != costePOB) {
+                    if (costePOU > costePOB) {
+                        victoriasUNI++;
+                    }else {
+                        victoriasBI++;
+                    }
+                }
+            }
+
+            String vencedor = victoriasUNI == victoriasBI ?
+                    "Empate" :
+                    victoriasUNI > victoriasBI ?
+                            "Unidireccional" :
+                            "Bidireccional";
+            Double tiempoVencedor = vencedor == "Unidireccional" ? tiempoExhaustivoUni + tiempoPodaUni : tiempoExhaustivoBi + tiempoPodaBi;
+
+            data.add(new Object[]{tamano, vencedor, tiempoVencedor / numExperimentos, vencedor == "Unidireccional" ? victoriasUNI : victoriasBI});
+        }
+
+        JTable table = new JTable(data.toArray(new Object[0][]), columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
+        JButton salir = new JButton("Salir");
+        salir.addActionListener(e -> {
+            CompararUniBi.setVisible(false);
+            Menu();
+        });
+
+        CompararUniBi.add(salir, BorderLayout.SOUTH);
+        CompararUniBi.add(scrollPane, BorderLayout.CENTER);
+        CompararUniBi.setVisible(true);
     }
 
     private static Ciudad obtenerCiudadInicial(Grafo grafo) {

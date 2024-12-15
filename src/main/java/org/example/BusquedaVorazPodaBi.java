@@ -64,7 +64,7 @@ public class BusquedaVorazPodaBi {
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
 
-        RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
 
         long endTime = System.currentTimeMillis();
         tiempo = (endTime - startTime);

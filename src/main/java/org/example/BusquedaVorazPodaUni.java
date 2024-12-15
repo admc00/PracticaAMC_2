@@ -36,7 +36,7 @@ public class BusquedaVorazPodaUni {
 
 
         }
-        RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
 
         long endTime = System.currentTimeMillis();
         tiempo = (endTime - startTime);

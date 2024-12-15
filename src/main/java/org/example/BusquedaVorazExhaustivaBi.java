@@ -62,7 +62,7 @@ public class BusquedaVorazExhaustivaBi {
 
         //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
 
-        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
 
         long endTime = System.currentTimeMillis();
         tiempo = (endTime - startTime);
