@@ -192,11 +192,7 @@ public class Auxiliares {
          Generamos una ciudad inicial de forma aleatoria, usando como semilla el reloj
          del sistema, (casi) garantizando asi un resultado diferente cada vez.
         */
-        var ciudades = grafo.obtenerCiudades();
-        ciudadInicial = ciudades
-                .stream()
-                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
-                .findFirst().orElse(null);
+        ciudadInicial = obtenerCiudadInicial(grafo);
 
         // Ordenamos el grafo almacenandolo en un nuevo grafo
         Grafo grafoOrd = new Grafo(grafo);
@@ -217,20 +213,18 @@ public class Auxiliares {
 
         double costeMinimoEXU = BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
         grafo.resetearGrafo();
-        grafoOrd.resetearGrafo();
+
 
         double costeMinimoPOU = BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicialOrdenada);
-        grafo.resetearGrafo();
         grafoOrd.resetearGrafo();
 
 
-        //double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+        double costeMinimoEXB = BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
         grafo.resetearGrafo();
-        grafoOrd.resetearGrafo();
 
 
-        //double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
-        grafo.resetearGrafo();
+
+        double costeMinimoPOB = BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicialOrdenada);
         grafoOrd.resetearGrafo();
 
 
@@ -239,9 +233,9 @@ public class Auxiliares {
         String[] columnNames = {"Estrategia", "Solución", "Calculadas", "Tiempo (mseg)"};
         Object[][] data = {
                     {"Unidireccional exhaustivo",costeMinimoEXU, 8386, 0.1679},
-                    {"Bidireccional exhaustivo",0, 12249, 0.2317},
+                    {"Bidireccional exhaustivo",costeMinimoEXB, 12249, 0.2317},
                     {"Unidireccional con poda",costeMinimoPOU, 2386, 0.1479},
-                    {"Bidireccional con poda",0, 2947, 0.1571}
+                    {"Bidireccional con poda",costeMinimoPOB, 2947, 0.1571}
         };
 
         JTable table = new JTable(data, columnNames);
@@ -297,27 +291,46 @@ public class Auxiliares {
         String[] columnNames = {"Tamaño", "Estrategia", "Tiempo Medio (ms)"};
         List<Object[]> data = new ArrayList<>();
 
-        int[] tamanos = {50, 100, 200}; // Ejemplo de tamaños de dataset
+        Ciudad ciudadInicial;
+
+        int[] tamanos = {50, 100, 200}; //
         int numExperimentos = 10;
 
+
+
         for (int tamano : tamanos) {
+            Double tiempoExhaustivoUni = 0.0;
+            Double tiempoPodaUni = 0.0;
+            Double tiempoExhaustivoBi = 0.0;
+            Double tiempoPodaBi = 0.0;
+
             for (int i = 0; i < numExperimentos; i++) {
                 Ficheros.crearArchivoTSP(tamano);
                 grafo = Ficheros.leerFichero("dataset" + tamano + ".tsp");
-                long startTime = System.currentTimeMillis();
-                BusquedaVorazExhausitvaUni.costeMinimo(grafo, obtenerCiudadInicial(grafo));
-                long endTime = System.currentTimeMillis();
-                data.add(new Object[]{tamano, "Unidireccional Exhaustivo", (endTime - startTime)});
+                ciudadInicial = obtenerCiudadInicial(grafo);
+                Grafo grafoOrd = new Grafo(grafo);
+                grafoOrd.ordenarPorCoordenadaX();
 
+                BusquedaVorazExhausitvaUni.costeMinimo(grafo, ciudadInicial);
+                tiempoExhaustivoUni += BusquedaVorazExhausitvaUni.getTiempo();
                 grafo.resetearGrafo();
 
-                startTime = System.currentTimeMillis();
-                BusquedaVorazPodaUni.costeMinimo(grafo, obtenerCiudadInicial(grafo));
-                endTime = System.currentTimeMillis();
-                data.add(new Object[]{tamano, "Unidireccional con Poda", (endTime - startTime)});
+                BusquedaVorazPodaUni.costeMinimo(grafoOrd, ciudadInicial);
+                tiempoPodaUni += BusquedaVorazPodaUni.getTiempo();
+                grafoOrd.resetearGrafo();
 
+                BusquedaVorazExhaustivaBi.costeMinimo(grafo, ciudadInicial);
+                tiempoExhaustivoBi += BusquedaVorazExhaustivaBi.getTiempo();
                 grafo.resetearGrafo();
+
+                BusquedaVorazPodaBi.costeMinimo(grafoOrd, ciudadInicial);
+                tiempoPodaBi += BusquedaVorazPodaBi.getTiempo();
+                grafoOrd.resetearGrafo();
             }
+            data.add(new Object[]{tamano, "Unidireccional Exhaustivo", tiempoExhaustivoUni / numExperimentos});
+            data.add(new Object[]{tamano, "Unidireccional con Poda", tiempoPodaUni / numExperimentos});
+            data.add(new Object[]{tamano, "Bidireccional Exhaustivo", tiempoExhaustivoBi / numExperimentos});
+            data.add(new Object[]{tamano, "Bidireccional con Poda", tiempoPodaBi / numExperimentos});
         }
 
         JTable table = new JTable(data.toArray(new Object[0][]), columnNames);
@@ -333,6 +346,11 @@ public class Auxiliares {
         CompararTodasLasEstrategias.add(salir, BorderLayout.SOUTH);
         CompararTodasLasEstrategias.add(scrollPane, BorderLayout.CENTER);
         CompararTodasLasEstrategias.setVisible(true);
+    }
+
+    public static void comparar2Estrategias(){
+
+
     }
 
     private static Ciudad obtenerCiudadInicial(Grafo grafo) {

@@ -7,10 +7,13 @@ import java.util.Set;
 
 public class BusquedaVorazPodaBi {
 
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
+    private static double tiempo = 0;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        long startTime = System.currentTimeMillis();
         ruta.clear();
         coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
@@ -61,8 +64,15 @@ public class BusquedaVorazPodaBi {
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
+
+        long endTime = System.currentTimeMillis();
+        tiempo = (endTime - startTime);
         return coste;
+    }
+
+    public static double getTiempo() {
+        return tiempo;
     }
 
     // Metodo para buscar la ciudad más cercana a un extremo

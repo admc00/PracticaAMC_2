@@ -4,10 +4,13 @@ import java.util.*;
 
 public class BusquedaVorazExhaustivaBi {
 
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste;
 
+    private static double tiempo;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        long startTime = System.currentTimeMillis();
         ruta.clear();
         coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
@@ -59,9 +62,16 @@ public class BusquedaVorazExhaustivaBi {
 
         //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
 
-        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+
+        long endTime = System.currentTimeMillis();
+        tiempo = (endTime - startTime);
 
         return coste;
+    }
+
+    public static double getTiempo() {
+        return tiempo;
     }
 
     // Metodo para buscar la ciudad más cercana a un extremo

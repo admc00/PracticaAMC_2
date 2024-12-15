@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 public class BusquedaVorazPodaUni {
-    public static final List<Ciudad> ruta = new ArrayList<>();
+    private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
+    private static double tiempo = 0;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        long startTime = System.currentTimeMillis();
+
         ruta.clear();
         coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
@@ -47,7 +51,14 @@ public class BusquedaVorazPodaUni {
 
         RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaUni");
 
+        long endTime = System.currentTimeMillis();
+        tiempo = (endTime - startTime);
+
         return coste;
+    }
+
+    public static double getTiempo() {
+        return tiempo;
     }
 
     private static Ciudad encontrarCiudadMasCercana(Grafo grafo, Ciudad ciudadActual) {

@@ -69,11 +69,4 @@ public class Main {
         System.out.println(g);*/
 
     }
-
-    private static void metod(String algoritmoNombre, List<Ciudad> ruta, double coste){
-        System.out.println("Algoritmo: " + algoritmoNombre);
-        System.out.println("Ruta: " + ruta);
-        System.out.println("Coste: " + coste);
-        System.out.println();
-    }
 }
