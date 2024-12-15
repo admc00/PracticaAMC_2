@@ -87,12 +87,15 @@ public class BusquedaVorazPodaBi {
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
+        double pesoMinimo = Double.MAX_VALUE;
+
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
-            if ((ciudadDestino.getX() - ciudadActual.getX()) <= camino.getPeso()) {
+            if ((ciudadDestino.getX() - ciudadActual.getX()) <= pesoMinimo) {
                 calculadas++;
                 if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                     caminoMasCorto = camino;
+                    pesoMinimo = camino.getPeso();
                 }
             }
         }
