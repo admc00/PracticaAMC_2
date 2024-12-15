@@ -53,14 +53,13 @@ public class BusquedaVorazPodaBi {
             }
 
             // Marcar la ciudad como visitada
-            //if (extremoInicio != null) extremoInicio.setVisitada(true);
-            //if (extremoFin != null) extremoFin.setVisitada(true);
+            if (extremoInicio != null) extremoInicio.setVisitada(true);
+            if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
         var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
-        //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
 
         //RutaPanel.mostrarRuta(ruta, "BusquedaVorazPodaBi");
         return coste;
@@ -70,18 +69,15 @@ public class BusquedaVorazPodaBi {
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
-        //double pesoMinimo = Double.MAX_VALUE;
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
-            if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
-                caminoMasCorto = camino;
-                //pesoMinimo = camino.getPeso();
-            }
-            if (Math.abs(ciudadActual.getX() - ciudadDestino.getX()) >= camino.getPeso()) {
-                break;
+
+            if ((ciudadDestino.getX() - ciudadActual.getX()) <= camino.getPeso()) {
+                if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
+                    caminoMasCorto = camino;
+                }
             }
         }
-        if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }

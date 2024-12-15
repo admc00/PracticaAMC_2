@@ -50,8 +50,8 @@ public class BusquedaVorazExhaustivaBi {
             }
 
             // Marcar la ciudad como visitada
-            //if (extremoInicio != null) extremoInicio.setVisitada(true);
-            //if (extremoFin != null) extremoFin.setVisitada(true);
+            if (extremoInicio != null) extremoInicio.setVisitada(true);
+            if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
         var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
@@ -75,7 +75,7 @@ public class BusquedaVorazExhaustivaBi {
                 caminoMasCorto = camino;
             }
         }
-        if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
+        //if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }
