@@ -7,9 +7,13 @@ public class BusquedaVorazExhausitvaUni {
     private static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
+    private static double tiempo = 0;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
+        long startTime = System.currentTimeMillis();
         ruta.clear();
         coste = 0;
+
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
         /*if (ciudades.isEmpty()) {
             return 0;
@@ -37,8 +41,15 @@ public class BusquedaVorazExhausitvaUni {
 
         RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
 
+        long endTime = System.currentTimeMillis();
+        tiempo = (endTime - startTime);
+
         return coste;
 
+    }
+
+    public static double getTiempo() {
+        return tiempo;
     }
 
     private static Ciudad encontrarCiudadMasCercana(Grafo grafo, Ciudad ciudadActual) {
