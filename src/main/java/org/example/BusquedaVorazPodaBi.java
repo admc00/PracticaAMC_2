@@ -12,10 +12,14 @@ public class BusquedaVorazPodaBi {
 
     private static double tiempo = 0;
 
+    private static double calculadas = 0;
+
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         long startTime = System.currentTimeMillis();
         ruta.clear();
         coste = 0;
+        calculadas = 0;
+
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
 
         int idCiudadInicial = ciudadInicial.getID();
@@ -75,16 +79,23 @@ public class BusquedaVorazPodaBi {
         return tiempo;
     }
 
+    public static double getCalculadas() {
+        return calculadas;
+    }
+
     // Metodo para buscar la ciudad más cercana a un extremo
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;
+        double pesoMinimo = Double.MAX_VALUE;
+
         for (Camino camino : caminos) {
             Ciudad ciudadDestino = camino.getC2().equals(ciudadActual) ? camino.getC1() : camino.getC2();
-
-            if ((ciudadDestino.getX() - ciudadActual.getX()) <= camino.getPeso()) {
+            if ((ciudadDestino.getX() - ciudadActual.getX()) <= pesoMinimo) {
+                calculadas++;
                 if (!ciudadDestino.esVisitada() && (caminoMasCorto == null || camino.getPeso() < caminoMasCorto.getPeso())) {
                     caminoMasCorto = camino;
+                    pesoMinimo = camino.getPeso();
                 }
             }
         }
