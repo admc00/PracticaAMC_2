@@ -4,7 +4,7 @@ import java.util.*;
 
 public class BusquedaVorazExhausitvaUni {
 
-    private final static ArrayList<Ciudad> ruta = new ArrayList<>();
+    public static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste = 0;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
@@ -35,14 +35,14 @@ public class BusquedaVorazExhausitvaUni {
         }
 
         // Imprimir la ruta
-        System.out.println("Ruta: " + ruta);
+        /*System.out.println("Ruta: " + ruta);
         System.out.println("\n");
         System.out.println("Número de ciudades visitadas: " + ruta.size());
-        System.out.println("Coste: " + coste);
+        System.out.println("Coste: " + coste);*/
 
 
 
-        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhausitvaUni");
 
         return coste;
 

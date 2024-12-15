@@ -43,10 +43,11 @@ public class Camino {
 
     @Override
     public String toString() {
-        return "Camino{" +
+        return "\n\t\t" +
+                "Camino{" +
                 "c1=" + c1 +
                 ", c2=" + c2 +
                 ", peso=" + peso +
-                '}';
+                "}";
     }
 }

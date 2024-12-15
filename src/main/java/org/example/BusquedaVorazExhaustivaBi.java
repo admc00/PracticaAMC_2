@@ -4,22 +4,14 @@ import java.util.*;
 
 public class BusquedaVorazExhaustivaBi {
 
-    private final static List<Ciudad> ruta = new ArrayList<>();
+    public static final List<Ciudad> ruta = new ArrayList<>();
     private static double coste;
 
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         ruta.clear();
         coste = 0;
         Set<Ciudad> ciudades = grafo.obtenerCiudades();
-        //if (ciudades.isEmpty()) return Collections.emptyList();
 
-        // Elegir una ciudad inicial aleatoriamente
-        /*Ciudad ciudadInicial = ciudades.stream().filter(ciudad -> ciudad.getID() == 1).findFirst().get();/*ciudades
-                .stream()
-                .skip(new Random(System.currentTimeMillis()).nextInt(ciudades.size()))
-                .findFirst().orElse(null);*/
-
-        //int indiceCiudadInicial = ruta.indexOf(ciudadInicial);
         int idCiudadInicial = ciudadInicial.getID();
 
         // Inicializar variables
@@ -58,16 +50,16 @@ public class BusquedaVorazExhaustivaBi {
             }
 
             // Marcar la ciudad como visitada
-            if (extremoInicio != null) extremoInicio.setVisitada(true);
-            if (extremoFin != null) extremoFin.setVisitada(true);
+            //if (extremoInicio != null) extremoInicio.setVisitada(true);
+            //if (extremoFin != null) extremoFin.setVisitada(true);
         }
 
         var indiceCiudadInicial = ruta.indexOf(ciudades.stream().filter(ciudad -> ciudad.getID() == idCiudadInicial).findFirst().get());
         Collections.rotate(ruta, -indiceCiudadInicial); // No es -1 sino la distancia que hay desde el elemento de inicio hasta 0
 
-        System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
+        //System.out.println(ruta.toString() + "\n"+ ruta.size() + "\n" + idCiudadInicial);
 
-        RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
+        //RutaPanel.mostrarRuta(ruta, "BusquedaVorazExhaustivaBi");
 
         return coste;
     }
@@ -83,6 +75,7 @@ public class BusquedaVorazExhaustivaBi {
                 caminoMasCorto = camino;
             }
         }
+        if (caminoMasCorto != null) {caminoMasCorto.getC2().setVisitada(true);}
         return caminoMasCorto;
     }
 }

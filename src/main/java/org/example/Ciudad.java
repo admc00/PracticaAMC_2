@@ -40,6 +40,6 @@ public class Ciudad {
 
     @Override
     public String toString() {
-        return "id: " + this.id + ", x: " + this.x + ", y: " + this.y;
+        return "id: " + this.id + ", x: " + this.x + ", y: " + this.y + ", visitada: " + this.visitada;
     }
 }

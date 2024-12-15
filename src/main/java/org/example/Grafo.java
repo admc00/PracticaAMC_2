@@ -112,16 +112,16 @@ public class Grafo {
 
     @Override
     public String toString() {
-        String grafo_string = "Grafo: {\n\n";
+        String grafo_string = "Grafo: {";
 
         for (Ciudad ciudad : obtenerCiudades()) {
-            grafo_string = grafo_string.concat("Ciudad: " + ciudad.toString() + " {");
-           /* for (Camino camino : obtenerCaminos(ciudad)) {
+            grafo_string = grafo_string.concat("\n\tCiudad: " + ciudad.toString() + " {");
+            for (Camino camino : obtenerCaminos(ciudad)) {
                 grafo_string = grafo_string.concat(camino.toString());
-            }*/
-            grafo_string.concat("}\n\n");
+            }
+            grafo_string = grafo_string.concat("}");
         }
-
+        grafo_string = grafo_string.concat("}\n");
         return grafo_string;
     }
 }
