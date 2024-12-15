@@ -9,6 +9,11 @@ public class RutaPanel extends JPanel {
     private java.util.List<Ciudad> ciudades;
     private double escala;
 
+
+    /**
+     * Calcula la escala para dibujar las ciudades en el panel
+     * de acuerdo al tamaño del panel y las coordenadas de las ciudades.
+     */
     private void calcularEscala() {
         double maxX = ciudades.stream().mapToDouble(Ciudad::getX).max().orElse(1);
         double maxY = ciudades.stream().mapToDouble(Ciudad::getY).max().orElse(1);
@@ -17,10 +22,19 @@ public class RutaPanel extends JPanel {
         escala = Math.min(panelWidth / maxX, panelHeight / maxY);
     }
 
+
+
     public RutaPanel(List<Ciudad> ciudades) {
         this.ciudades = ciudades;
         calcularEscala();
     }
+
+
+    /**
+     *Dibuja las ciudades y los caminos en el panel
+     *a partir de las coordenadas de las ciudades.
+     *
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -61,7 +75,12 @@ public class RutaPanel extends JPanel {
         }
     }
 
-
+    /**
+     * Muestra un JFrame con el panel que dibuja las ciudades y los caminos.
+     * @param ciudades Lista de ciudades
+     * @param heuristica Nombre de la estrategia utilizada
+     *
+     */
     public static void mostrarRuta(List<Ciudad> ciudades, String heuristica) {
         JFrame frame = new JFrame("Ruta de Ciudades " + heuristica);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

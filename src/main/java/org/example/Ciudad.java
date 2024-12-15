@@ -2,8 +2,11 @@ package org.example;
 
 public class Ciudad {
 
+    //Coordenadas de la ciudad
     private final double x, y;
     private final int id;
+
+    //Indica si la ciudad ha sido visitada
     private Boolean visitada = false;
 
     public Ciudad(double x, double y, int id) {
@@ -30,6 +33,11 @@ public class Ciudad {
         return this.id;
     }
 
+    /**
+     * Comprobar si una ciudad esta visitada.
+     *
+     * @return Un booleano en funcion de si esta visitada o no.
+     */
     public Boolean esVisitada() {
         return this.visitada;
     }

@@ -13,6 +13,11 @@ public class Auxiliares {
     private static Grafo grafo;
     private static int eleccionAlgoritmo;
 
+
+    /**
+     * Muestra un Frame para elegir las opciones de creacion de archivos
+     * y comparacion de algoritmos
+     */
     public static void Menu(){
         JFrame menu = new JFrame("Menú");
         menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,6 +89,10 @@ public class Auxiliares {
         menu.setVisible(true);
     }
 
+
+    /**
+     * Muestra un frame para elegir el archivo a cargar en memoria
+     */
     public static void CargarArchivo(){
         JFrame nuevaVentana = new JFrame("Cargar Archivo");
         nuevaVentana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -181,6 +190,11 @@ public class Auxiliares {
 
     }
 
+
+    /**
+     * Muestra un frame donde se muestran los datos de la ejecución de las estrategias
+     * sobre un dataset cargado en memoria
+     */
     public static void ComprobarEstrategias() {
         JFrame ComprobarEstrategias = new JFrame("Comprobar Estrategias");
         ComprobarEstrategias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -272,6 +286,10 @@ public class Auxiliares {
 
     }
 
+
+    /**
+     * Muestra un frame para escribir el tamaño del dataset a crear y cargarlo en memoria
+     */
     public static void CrearArchivo() {
         JFrame CrearArchivo = new JFrame("Crear Archivo");
         CrearArchivo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -296,6 +314,13 @@ public class Auxiliares {
 
     }
 
+
+
+    /**
+     * Muestra un frame con los datos de la ejecución de las estrategias
+     * sobre datasets de diferentes tamaños.
+     * Muestra el tiempo medio de ejecución.
+     */
     public static void compararTodasLasEstrategias() {
         JFrame CompararTodasLasEstrategias = new JFrame("Comparar Todas Las Estrategias");
         CompararTodasLasEstrategias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -362,6 +387,13 @@ public class Auxiliares {
         CompararTodasLasEstrategias.setVisible(true);
     }
 
+
+    /**
+     * Muestra un frame con los datos de la ejecución de 2 estrategias
+     * sobre datasets de diferentes tamaños.
+     * Muestra el tiempo medio de ejecución y la distancia media.
+     * @param eleccionAlgoritmo Entero para saber que 2 algoritmos han sido seleccionados
+     */
     public static void comparar2Estrategias(int eleccionAlgoritmo) {
         JFrame Comparar2Estrategias = new JFrame("Comparar 2 Estrategias");
         Comparar2Estrategias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -575,6 +607,10 @@ public class Auxiliares {
         Comparar2Estrategias.setVisible(true);
     }
 
+
+    /**
+     * Muestra un frame con un checkbox para elegir 2 algoritmos
+     */
     private static void ElegirAlgoritmo(){
         JFrame ElegirAlgoritmo = new JFrame("Elegir Algoritmo");
         ElegirAlgoritmo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -619,6 +655,15 @@ public class Auxiliares {
             }
         });
     }
+
+    /**
+     * Devuelve un entero que representa la elección de los algoritmos
+     * @param alg1 Checkbox del algoritmo 1
+     * @param alg2 Checkbox del algoritmo 2
+     * @param alg3 Checkbox del algoritmo 3
+     * @param alg4 Checkbox del algoritmo 4
+     * @return -1 en caso de no haber seleccionado 2 algoritmos, en caso contrario devuelve un entero.
+     */
     private static int getEleccionAlgoritmo(JCheckBox alg1, JCheckBox alg2, JCheckBox alg3, JCheckBox alg4) {
         if (alg1.isSelected() && alg2.isSelected()) return 1;
         if (alg1.isSelected() && alg3.isSelected()) return 2;
@@ -629,6 +674,11 @@ public class Auxiliares {
         return -1;
     }
 
+
+    /**
+     * Muestra un frame con los datos de la ejecución de los algoritmos.
+     * Se comparan los algoritmos unidireccional y bidireccional mediante el coste mínimo.
+     */
     private static void compararUniBi() {
         JFrame CompararUniBi = new JFrame("Comparar Unidireccional vs Bidireccional");
         CompararUniBi.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -698,7 +748,7 @@ public class Auxiliares {
                             "Bidireccional";
             Double tiempoVencedor = vencedor == "Unidireccional" ? tiempoExhaustivoUni + tiempoPodaUni : tiempoExhaustivoBi + tiempoPodaBi;
 
-            data.add(new Object[]{tamano, vencedor, tiempoVencedor / numExperimentos, vencedor == "Unidireccional" ? victoriasUNI : victoriasBI});
+            data.add(new Object[]{tamano, vencedor, tiempoVencedor / numExperimentos, vencedor == "Unidireccional" ? victoriasUNI - victoriasBI : victoriasBI - victoriasUNI});
         }
 
         JTable table = new JTable(data.toArray(new Object[0][]), columnNames);
@@ -716,6 +766,11 @@ public class Auxiliares {
         CompararUniBi.setVisible(true);
     }
 
+    /**
+     * Obtiene una ciudad inicial de forma aleatoria
+     * @param grafo Grafo del que se obtiene la ciudad
+     * @return Ciudad inicial
+     */
     private static Ciudad obtenerCiudadInicial(Grafo grafo) {
         var ciudades = grafo.obtenerCiudades();
         return ciudades.stream()

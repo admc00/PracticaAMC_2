@@ -27,7 +27,7 @@ public class Grafo {
     }
 
     /**
-     * Agregar una camino al grafo. Si alguno de las ciudades del camino no existe,
+     * Agregar un camino al grafo. Si alguno de las ciudades del camino no existe,
      * se agrega automáticamente.
      *
      * @param ciudad1 Ciudad de inicio del camino.
@@ -85,6 +85,7 @@ public class Grafo {
     }
 
     /**
+     * Poner el atributo visitada de las ciudades a false.
      *
      */
     public void resetearGrafo() {
@@ -93,11 +94,17 @@ public class Grafo {
         }
     }
 
+    /**
+     * Dejar el grafo vacio.
+     *
+     */
     public void borrarGrafo() {
         relaciones.clear();
     }
 
     /**
+     *
+     * Ordena las ciudades del grafo por su coordenada X.
      *
      */
     public void ordenarPorCoordenadaX() {

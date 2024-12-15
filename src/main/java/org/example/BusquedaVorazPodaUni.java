@@ -12,6 +12,11 @@ public class BusquedaVorazPodaUni {
 
     private static double calculadas = 0;
 
+    /**
+     * Calcula el coste mínimo de un recorrido por todas las ciudades del grafo.
+     *
+     * @return Coste mínimo del recorrido.
+     */
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         long startTime = System.currentTimeMillis();
 
@@ -48,14 +53,33 @@ public class BusquedaVorazPodaUni {
         return coste;
     }
 
+
+    /**
+     * Obtiene el tiempo de ejecución de la última llamada a costeMinimo.
+     *
+     * @return Tiempo de ejecución en milisegundos.
+     */
     public static double getTiempo() {
         return tiempo;
     }
 
+
+    /**
+     * Obtiene el número de distancias euclideas calculadas en la última llamada a costeMinimo.
+     *
+     * @return Número de distancias euclideas calculadas.
+     */
     public static double getCalculadas() {
         return calculadas;
     }
 
+    /**
+     * Encuentra la ciudad más cercana a la ciudad actual.
+     *
+     * @param grafo Grafo de ciudades.
+     * @param ciudadActual Ciudad actual.
+     * @return Ciudad más cercana.
+     */
     private static Ciudad encontrarCiudadMasCercana(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Ciudad ciudadMasCercana = null;

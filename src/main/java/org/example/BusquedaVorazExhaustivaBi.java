@@ -11,6 +11,11 @@ public class BusquedaVorazExhaustivaBi {
 
     private static double calculadas;
 
+    /**
+     * Calcula el coste mínimo de un recorrido por todas las ciudades del grafo.
+     *
+     * @return Coste mínimo del recorrido.
+     */
     public static double costeMinimo(Grafo grafo, Ciudad ciudadInicial) {
         long startTime = System.currentTimeMillis();
         ruta.clear();
@@ -74,15 +79,33 @@ public class BusquedaVorazExhaustivaBi {
         return coste;
     }
 
+
+    /**
+     * Obtiene el tiempo de ejecución de la última llamada a costeMinimo.
+     *
+     * @return Tiempo de ejecución en milisegundos.
+     */
     public static double getTiempo() {
         return tiempo;
     }
 
+
+    /**
+     * Obtiene el número de distancias euclideas calculadas en la última llamada a costeMinimo.
+     *
+     * @return Número de distancias euclideas calculadas.
+     */
     public static double getCalculadas() {
         return calculadas;
     }
 
-    // Metodo para buscar la ciudad más cercana a un extremo
+    /**
+     * Busca el camino más corto desde la ciudad actual.
+     *
+     * @param grafo Grafo de ciudades.
+     * @param ciudadActual Ciudad actual.
+     * @return Camino más corto.
+     */
     private static Camino buscarCaminoMasCorto(Grafo grafo, Ciudad ciudadActual) {
         Set<Camino> caminos = grafo.obtenerCaminos(ciudadActual);
         Camino caminoMasCorto = null;

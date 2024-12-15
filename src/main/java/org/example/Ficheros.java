@@ -8,6 +8,11 @@ import java.util.logging.Logger;
 
 public class Ficheros {
 
+    /**
+     * Lee un fichero y guarda los datos del fichero en un grafo.
+     * param texto: Nombre del fichero a leer.
+     * @return Grafo con los datos del fichero.
+     */
     public static Grafo leerFichero(String texto) {
         FileReader fr = null;
         BufferedReader br;
@@ -63,6 +68,11 @@ public class Ficheros {
         return grafo;
     }
 
+    /**
+     * Crea un archivo TSP con un número de ciudades.
+     * @param size: Número de ciudades a crear.
+     *
+     */
    public static void crearArchivoTSP(Integer size) {
         File dir, file;
         ArrayList<Ciudad> puntos = new ArrayList<>();
@@ -105,6 +115,12 @@ public class Ficheros {
         }
 
     }
+
+    /**
+     * Crea un Arraylist con un número de ciudades.
+     * @paraM n: Número de ciudades a crear.
+     * @return ArrayList con las ciudades creadas.
+     */
     public static ArrayList<Ciudad> RellenarPuntos(int n) {
         ArrayList<Ciudad> p = new ArrayList<>();
 
@@ -125,7 +141,4 @@ public class Ficheros {
 
         return p;
     }
-
-
-    //@TODO: Importar el resto de clases de Fichero de la prac 1
 }

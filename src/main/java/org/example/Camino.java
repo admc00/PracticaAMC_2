@@ -2,6 +2,8 @@ package org.example;
 
 public class Camino {
     private final Ciudad c1, c2;
+
+    //Distancia euclidea entre dos ciudades
     private final double peso;
 
 
@@ -23,6 +25,12 @@ public class Camino {
         peso = 0;
     }
 
+
+    /**
+     * Calcular la distancia euclidea entre 2 ciudades.
+     *
+     * @return La distancia euclidea.
+     */
     private double calcularPeso() {
         double pesoX = c1.getX() - c2.getX();
         double pesoY = c1.getY() - c2.getY();
